@@ -11,7 +11,8 @@ const UserSchema = new Schema({
     username: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        default: 'defaultName'
     },
     name: {
         firstName: {
@@ -37,5 +38,31 @@ const UserSchema = new Schema({
         required: true
     }
 }, { timestamps: true })
+
+UserSchema.pre('save', async function(next){
+    const user = this
+
+    if (!user.isModified('email')) return next()
+
+    try{
+        const baseUsername = user.email.split('@')[0]
+        let username = baseUsername
+        let counter = 1
+
+        const User = mongoose.model('User', UserSchema);
+
+        while(await User.exists({ username })){
+            username = `${baseUsername}${counter}`
+            counter++
+        }
+
+        user.username = username
+        next()
+
+    }catch(err){
+        next(err)
+    }
+
+})
 
 export default mongoose.model('User', UserSchema)

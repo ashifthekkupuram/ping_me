@@ -165,10 +165,64 @@ export const register = async (req, res, next) => {
 
 export const refresh = async (req, res, next) => {
     try{
-        return res.json({
-            success: true,
-            message: 'Refresh API works!!!'
-        })
+       
+        const cookies = req.cookies
+
+        if(!cookies?.jwt){
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized'
+            })
+        }
+
+        const refreshToken = cookies.jwt
+
+
+        jwt.verify(
+            refreshToken,
+            REFRESH_SECRET_KEY,
+            async (err, decoded) => {
+
+                if(err){
+                    return res.status(403).json({
+                        success: false,
+                        message: 'Forbidden'
+                    })
+                }
+
+                const user = await User.findById(decoded._id)
+
+                if(!user){
+                    return res.status(401).json({
+                        success: false,
+                        message: 'Unauthorized'
+                    })
+                }
+
+                const accessToken = jwt.sign({
+                        _Id: user._id,
+                        email: user.email,
+                        username: user.username,
+                    },
+                    ACCESS_SECRET_KEY,
+                    {expiresIn: '5m'}
+                )
+
+                return res.json({
+                    success: true,
+                    accessToken,
+                    userData: {
+                        _id: user._id,
+                        email: user.email,
+                        username: user.username,
+                        name: user.name,
+                        bio: user.bio
+                    }
+                })
+
+            }
+        )
+        
     } catch (err) {
         return res.status(400).json({
             success: false,
@@ -180,10 +234,13 @@ export const refresh = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
     try{
-        return res.json({
-            success: true,
-            message: 'Logout API works!!!'
-        })
+        const cookies = req.cookies
+
+        if(!cookies?.jwt) return res.sendStatus(204)
+        
+        res.clearCookie('jwt', { httpOnly: true, secure: true, sameSite: 'None' })
+
+        res.json({success: true, message: 'Cookie cleared'})
     } catch (err) {
         return res.status(400).json({
             success: false,

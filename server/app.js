@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 
 import AuthRouter from './routes/auth.route.js'
+import ConversationRouter from './routes/conversation.route.js'
 
 import { CONNECT_DB } from './config/database.js'
 
@@ -17,7 +18,8 @@ app.use(express.json())
 app.use(cookieParser())
 
 //API routes
-app.use('/api/auth/', AuthRouter)
+app.use('/api/auth', AuthRouter)
+app.use('/api/coversation', ConversationRouter)
 
 app.listen(PORT, async () => {
     await CONNECT_DB()

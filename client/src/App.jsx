@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createTheme, ThemeProvider } from '@mui/material'
 
-import { Home, Login, Register } from './pages'
+import { Home, Login, Register, Landing } from './pages'
 import NavWrapper from './components/NavWrapper'
 
 const App = () => {
+
+  const [darkMode, setDarkMode] = useState(true)
+
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? 'dark' : 'light'
+    }
+  })
 
   const router = createBrowserRouter([
     {
@@ -24,11 +33,17 @@ const App = () => {
     {
       path: '/register',
       element: <Register />
+    },
+    {
+      path: '/welcome',
+      element: <Landing />
     }
   ])
 
   return (
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   )
 }
 

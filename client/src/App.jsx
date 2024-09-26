@@ -6,6 +6,8 @@ import { Home, Login, Register, Landing } from './pages'
 import NavWrapper from './components/NavWrapper'
 import AuthRedirect from './components/AuthRedirect'
 import AuthRequired from './components/AuthRequired'
+import AuthWrapper from './components/AuthWrapper'
+
 const App = () => {
 
   const [darkMode, setDarkMode] = useState(true)
@@ -19,38 +21,44 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <NavWrapper />,
+      element: <AuthWrapper />,
       children: [
         {
           path: '/',
-          element: <AuthRequired />,
+          element: <NavWrapper />,
           children: [
             {
               path: '/',
-              element: <Home />
+              element: <AuthRequired />,
+              children: [
+                {
+                  path: '/',
+                  element: <Home />
+                }
+              ]
             }
           ]
-        }
-      ]
-    },
-    {
-      path: '/',
-      element: <AuthRedirect />,
-      children: [
-        {
-          path: '/login',
-          element: <Login />
         },
         {
-          path: '/register',
-          element: <Register />
+          path: '/',
+          element: <AuthRedirect />,
+          children: [
+            {
+              path: '/login',
+              element: <Login />
+            },
+            {
+              path: '/register',
+              element: <Register />
+            },
+            {
+              path: '/welcome',
+              element: <Landing />
+            }
+          ]
         },
-        {
-          path: '/welcome',
-          element: <Landing />
-        }
       ]
-    },
+    }
   ])
 
   return (

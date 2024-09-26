@@ -4,6 +4,8 @@ import { Box, styled, TextField, Typography, Button, CircularProgress } from '@m
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { useNavigate } from 'react-router-dom';
 
+import axios from '../api/axios'
+
 const MainBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
@@ -66,12 +68,35 @@ const Register = () => {
     password: '',
   })
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('Internal Server Error')
+  const [error, setError] = useState(null)
 
   const navigate = useNavigate()
 
   const onChange = (e) => {
     setForm((prev) => ({...prev, [e.target.id]: e.target.value}))
+  }
+
+  const onSubmit = async (e) => {
+    setLoading(true)
+    setError(null)
+    try{
+      const response = await axios.post('/auth/register', { 
+        firstName: form.firstName.trim(),
+        secondName: form.secondName.trim(),
+        email: form.email.trim(),
+        password: form.password,
+       })
+       console.log(response.data.message)
+       navigate('/login')
+    } catch(err) {
+      if(err.response){
+        setError(err.response.data.message)
+      }else{
+        setError('Internal Server Error')
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -83,7 +108,7 @@ const Register = () => {
         <TextField type='text' value={form.secondName} variant='outlined' name='secondName' id='secondName' label='Second Name' onChange={onChange} error={error} helperText={error} required fullWidth />
         <TextField type='email' value={form.email} variant='outlined' name='email' id='email' label='Email' onChange={onChange} error={error} helperText={error} required fullWidth />
         <TextField type='password' value={form.password} variant='outlined' name='password' id='password' label='Password' onChange={onChange} error={error} helperText={error} required fullWidth />
-        <RegisterButton disabled={loading || !form.email || !form.password || !form.firstName || !form.secondName} >{ loading ? <CircularProgress size={24} /> : 'Login'}</RegisterButton>
+        <RegisterButton disabled={loading || !form.email || !form.password || !form.firstName || !form.secondName} onClick={onSubmit} >{ loading ? <CircularProgress size={24} /> : 'Login'}</RegisterButton>
         <CustomLink variant='small' onClick={(e)=>navigate('/login')}>Already have an account?</CustomLink>
       </FormBox> 
     </MainBox>

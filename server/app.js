@@ -1,11 +1,13 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 
 import AuthRouter from './routes/auth.route.js'
 import ConversationRouter from './routes/conversation.route.js'
 
 import { CONNECT_DB } from './config/database.js'
+import corsOptions from './config/corsOptions.js'
 
 dotenv.config()
 
@@ -16,6 +18,7 @@ const PORT = process.env.PORT || 5000
 // Express App configuration
 app.use(express.json())
 app.use(cookieParser())
+app.use(cors(corsOptions))
 
 //API routes
 app.use('/api/auth', AuthRouter)

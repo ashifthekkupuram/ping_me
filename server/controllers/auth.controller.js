@@ -28,7 +28,7 @@ export const login = async (req, res, next) => {
 
         if(!user){
             return res.status(400).json({
-                success: true,
+                success: false,
                 message: 'Invalid user credentials'
             })
         }
@@ -47,7 +47,7 @@ export const login = async (req, res, next) => {
                 _id: user._id
             }, REFRESH_SECRET_KEY, {expiresIn: '1d'})
 
-            res.cookie('jwt', {
+            res.cookie('jwt', refreshToken, {
                 httpOnly: true,
                 secure: true,
                 sameSite: 'None',
@@ -69,7 +69,7 @@ export const login = async (req, res, next) => {
 
         }else{
             return res.status(400).json({
-                success: true,
+                success: false,
                 message: 'Invalid user credentials'
             })
         }

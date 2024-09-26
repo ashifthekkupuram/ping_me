@@ -10,7 +10,7 @@ const MainBox = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   margin: 0,
   width: '100%',
-  height: '100vh',
+  minHeight: '100vh',
   backgroundColor: theme.palette.background.default
 }))
 
@@ -22,7 +22,7 @@ const FormBox = styled(Box)(({ theme }) => ({
   backgroundColor:  theme.palette.primary.contrastText,
   borderRadius: '10px',
   boxShadow: theme.shadows[3],
-  maxWidth: '500px'
+  width: '400px'
 }))
 
 const CustomChatBubleIcon = styled(ChatBubbleIcon)(({ theme }) => ({

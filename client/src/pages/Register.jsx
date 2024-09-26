@@ -10,7 +10,7 @@ const MainBox = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   margin: 0,
   width: '100%',
-  height: '100vh',
+  minHeight: '100vh',
   backgroundColor: theme.palette.background.default
 }))
 
@@ -66,7 +66,7 @@ const Register = () => {
     password: '',
   })
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState('Internal Server Error')
 
   const navigate = useNavigate()
 
@@ -78,7 +78,7 @@ const Register = () => {
     <MainBox>
       <FormBox>
         <CustomChatBubleIcon />
-        <Title variant='h4'>Login</Title>
+        <Title variant='h4'>Register</Title>
         <TextField type='text' value={form.firstName} variant='outlined' name='firstName' id='firstName' label='First Name' onChange={onChange} error={error} helperText={error} required fullWidth />
         <TextField type='text' value={form.secondName} variant='outlined' name='secondName' id='secondName' label='Second Name' onChange={onChange} error={error} helperText={error} required fullWidth />
         <TextField type='email' value={form.email} variant='outlined' name='email' id='email' label='Email' onChange={onChange} error={error} helperText={error} required fullWidth />

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material'
+import { useSelector } from 'react-redux'
 
 import { Home, Login, Register, Landing } from './pages'
 import NavWrapper from './components/NavWrapper'
@@ -10,7 +11,7 @@ import AuthWrapper from './components/AuthWrapper'
 
 const App = () => {
 
-  const [darkMode, setDarkMode] = useState(true)
+  const darkMode = useSelector((state) => state.darkMode)
 
   const theme = createTheme({
     palette: {

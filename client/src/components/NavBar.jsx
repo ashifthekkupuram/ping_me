@@ -59,7 +59,7 @@ const NavBar = () => {
   }
 
   return (
-    <AppBar>
+    <AppBar position='sticky'>
       <CustomToolBar>
         <Section>
           <CustomIconButton onClick={onMenu} size='small' edge='start'>

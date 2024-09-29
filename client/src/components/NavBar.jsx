@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
-import { AppBar, styled, Toolbar, Typography, Switch, Avatar, Box, IconButton } from '@mui/material'
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
-import MenuIcon from '@mui/icons-material/Menu';
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react'
+import { AppBar, styled, Toolbar, Typography, Switch, Avatar, Box, IconButton, } from '@mui/material'
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble'
+import MenuIcon from '@mui/icons-material/Menu'
+import MenuOpenIcon from '@mui/icons-material/MenuOpen'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { toggleTheme } from '../redux/slices/darkModeSlice';
+import { toggleTheme } from '../redux/slices/darkModeSlice'
+import { toggleMenu } from '../redux/slices/chatMenu'
+
+const CustomAppBar = styled(AppBar)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 1
+}))
 
 const CustomToolBar = styled(Toolbar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.contrastText,
@@ -44,8 +49,7 @@ const Section = styled(Box)(({ theme }) => ({
 
 const NavBar = () => {
 
-  const [showMenu, showMenuIcon] = useState(false)
-
+  const chatMenu = useSelector((state) => state.chatMenu)
   const darkMode = useSelector((state) => state.darkMode)
   const UserData = useSelector((state) => state.auth.UserData)
   const dispatch = useDispatch()
@@ -55,15 +59,15 @@ const NavBar = () => {
   }
 
   const onMenu = () => {
-    showMenuIcon((prev) => !prev)
+    dispatch(toggleMenu())
   }
 
   return (
-    <AppBar position='sticky'>
+    <CustomAppBar position='sticky'>
       <CustomToolBar>
         <Section>
           <CustomIconButton onClick={onMenu} size='small' edge='start'>
-            {showMenu ? <MenuOpenIcon /> : <MenuIcon />}
+            {chatMenu ? <MenuOpenIcon /> : <MenuIcon />}
           </CustomIconButton>
           <CustomChatBubleIcon />
           <Title variant='h1'>Ping me</Title>
@@ -73,7 +77,7 @@ const NavBar = () => {
           <Avatar alt={`${UserData.name?.firstName} ${UserData.name?.secondName}`} src={UserData?.profile} />
         </Section>
       </CustomToolBar>
-    </AppBar>
+    </CustomAppBar>
   )
 }
 

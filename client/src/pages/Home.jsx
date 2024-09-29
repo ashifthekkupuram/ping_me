@@ -1,16 +1,18 @@
 import React from 'react'
-import { Box, styled } from '@mui/material'
+import { Box, styled,  } from '@mui/material'
 
 import { useDispatch } from 'react-redux'
-import { Button } from '@mui/material'
 
-import ChatList from '../components/ChatList'
+import ChatMenu from '../components/ChatMenu'
 
 import { logout } from '../redux/slices/authSlice'
 
 const ContainerBox = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.primary.contrastText,
-  minHeight: '89vh'
+  height: 'calc(100vh - 64px)',
+  [theme.breakpoints.down('lg')]: {
+    height: 'calc(100vh - 56px)'
+  }
 }))
 
 const Home = () => {
@@ -23,7 +25,7 @@ const Home = () => {
 
   return (
     <ContainerBox>
-      <ChatList />
+      <ChatMenu />
     </ContainerBox>
   )
 }

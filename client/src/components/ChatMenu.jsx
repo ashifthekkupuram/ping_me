@@ -4,6 +4,12 @@ import { useSelector } from 'react-redux'
 
 import ChatCard from './ChatCard'
 
+const CustomDrawer = styled(Drawer)(({ theme }) => ({
+  width: '50%',
+  height: '90%',
+  scrollbarWidth: 'thin'
+}))
+
 const ChatMenu = () => {
 
     const theme = useTheme()
@@ -12,8 +18,7 @@ const ChatMenu = () => {
     const chatMenu = useSelector((state) => state.chatMenu)
 
   return (
-    <>
-    <Drawer variant={isMobile ? 'temporary': 'permanent'} open={chatMenu}>
+    <CustomDrawer variant={isMobile ? 'temporary': 'permanent'} open={chatMenu} >
         <ChatCard name='ashi' />
         <ChatCard name='ashi' />
         <ChatCard />
@@ -29,8 +34,7 @@ const ChatMenu = () => {
         <ChatCard />
         <ChatCard />
         <ChatCard />
-    </Drawer>
-    </>
+    </CustomDrawer>
   )
 }
 

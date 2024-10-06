@@ -1,6 +1,9 @@
 import React from 'react'
 import { Box, styled, FormGroup, TextField, Button, TableHead, Avatar, Typography, Paper } from '@mui/material'
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from '@mui/icons-material/Send'
+
+import MessageLeft from './MessageLeft'
+import MessageRight from './MessageRight'
 
 const ContainerBox = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -12,7 +15,7 @@ const CustomHeader = styled(TableHead)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '10px'
+    padding: '10px',
 }))
 
 const HeaderContainer = styled(Box)(({ theme }) => ({
@@ -23,7 +26,8 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
 
 const HeaderTitle = styled(Typography)(({ theme }) => ({
     color: theme.palette.text.primary,
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: 500
 }))
 
 const MessageBody = styled(Paper)(({ theme }) => ({
@@ -46,30 +50,16 @@ const ChatSection = () => {
             </HeaderContainer>
             <HeaderContainer></HeaderContainer>
         </CustomHeader>
-        <MessageBody>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
-            <Typography>asdas</Typography>
+        <MessageBody elevation={0}>
+            <MessageLeft message={'Hi'} />
+            <MessageLeft message={'Hello'} />
+            <MessageLeft message={'asdasdasdasdasdasdasdasdasdasdasdasdasdaasdasdasdasdasdasdasdasdasd'} />
+            <MessageRight message={'Yo'} />
+            <MessageRight message={'How you been'} />
+            <MessageRight message={'How you been asdasdasdasdasdasdadadadadasdasdasdasd'} />
         </MessageBody>
-        <FormGroup row sx={{width: '100%'}}>
-            <TextField placeholder='Typing anything...'/>
+        <FormGroup row sx={{display: 'flex',width: '100%'}}>
+            <TextField placeholder='Typing anything...' />
             <Button variant='contained'><SendIcon /></Button>
         </FormGroup>
     </ContainerBox>

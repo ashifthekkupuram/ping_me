@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, styled, FormGroup, TextField, Button, TableHead, Avatar, Typography, Paper } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 
@@ -16,6 +16,7 @@ const CustomHeader = styled(TableHead)(({ theme }) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: '10px',
+    borderBottom: `1px solid ${theme.palette.text.primary}`
 }))
 
 const HeaderContainer = styled(Box)(({ theme }) => ({
@@ -41,6 +42,19 @@ const MessageBody = styled(Paper)(({ theme }) => ({
 }))
 
 const ChatSection = () => {
+
+    const [text, setText] = useState('')
+    const [messages, setMessages] = useState([])
+
+    const onTextChange = (e) => {
+        setText(e.target.value)
+    }
+
+    const addMessage = (e) => {
+        setMessages(prev => [...prev, text])
+        setText('')
+    }
+
   return (
     <ContainerBox>
         <CustomHeader>
@@ -51,17 +65,12 @@ const ChatSection = () => {
             <HeaderContainer></HeaderContainer>
         </CustomHeader>
         <MessageBody elevation={0}>
-            <MessageLeft message={'Hi'} />
-            <MessageLeft message={'Hello'} />
-            <MessageLeft message={'asdasdasdasdasdasdasdasdasdasdasdasdasdaasdasdasdasdasdasdasdasdasd'} />
-            <MessageRight message={'Yo'} />
-            <MessageRight message={'How you been'} />
-            <MessageRight message={'How you been asdasdasdasdasdasdadadadadasdasdasdasd'} />
+            {messages && messages.map((msg)=> <MessageRight message={msg} /> )}
         </MessageBody>
-        <FormGroup row sx={{display: 'flex',width: '100%'}}>
-            <TextField placeholder='Typing anything...' />
-            <Button variant='contained'><SendIcon /></Button>
-        </FormGroup>
+        <Box row sx={{display: 'flex',width: '100%'}}>
+            <TextField value={text} placeholder='Typing anything...' autoComplete={false} sx={{flex: 3}} onChange={onTextChange} />
+            <Button disabled={!text} variant='contained' onClick={addMessage}><SendIcon /></Button>
+        </Box>
     </ContainerBox>
   )
 }

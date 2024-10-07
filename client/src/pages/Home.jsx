@@ -27,7 +27,7 @@ const Home = () => {
 
   return (
     <ContainerBox>
-      <Box component='nav' sx={{ width: { sm: 240 }, flexShrink: { sm: 0 } }}>
+      <Box component='nav' sx={{ width: { sm: 230 }, flexShrink: { sm: 0 } }}>
         <ChatMenu />
       </Box>
       <ChatSection />

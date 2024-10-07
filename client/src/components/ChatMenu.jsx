@@ -1,5 +1,5 @@
 import React from 'react'
-import { Drawer, styled, useMediaQuery, useTheme } from '@mui/material'
+import { Drawer, styled, useMediaQuery, useTheme, Divider } from '@mui/material'
 import { useSelector } from 'react-redux'
 
 import ChatCard from './ChatCard'
@@ -7,7 +7,7 @@ import ChatCard from './ChatCard'
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
   width: '50%',
   height: '90%',
-  scrollbarWidth: 'thin'
+  '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 230 },
 }))
 
 const ChatMenu = () => {
@@ -19,6 +19,7 @@ const ChatMenu = () => {
 
   return (
     <CustomDrawer variant={isMobile ? 'temporary': 'permanent'} open={chatMenu} >
+      <Divider sx={{ marginTop: 8 }} >Chats</Divider>
         <ChatCard name='ashi' />
         <ChatCard name='ashi' />
         <ChatCard />

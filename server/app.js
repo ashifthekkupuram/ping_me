@@ -5,6 +5,7 @@ import cors from 'cors'
 
 import AuthRouter from './routes/auth.route.js'
 import ConversationRouter from './routes/conversation.route.js'
+import UserRouter from './routes/user.route.js'
 
 import { CONNECT_DB } from './config/database.js'
 import corsOptions from './config/corsOptions.js'
@@ -23,6 +24,7 @@ app.use(cors(corsOptions))
 //API routes
 app.use('/api/auth', AuthRouter)
 app.use('/api/coversation', ConversationRouter)
+app.use('/api/user', UserRouter)
 
 app.listen(PORT, async () => {
     await CONNECT_DB()

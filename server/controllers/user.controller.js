@@ -1,20 +1,27 @@
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 
 import User from '../models/user.model.js'
+
+dotenv.config()
+
+const ACCESS_SECRET_KEY = process.env.ACCESS_SECRET_KEY
 
 export const get_users = async (req, res, next) => {
     try{
 
-        const user = await User.findById(jwt.decode(req.user)._id)
+        const user = await jwt.verify(req.token, ACCESS_SECRET_KEY)
 
-        if(!user){
+        const myUser = await User.findById(user._Id)
+
+        if(!myUser){
             return res.status(400).json({
                 success: false,
                 message: 'User not found'
             })
         }
 
-        const filteredUsers = await User.find({_id: { $ne: user_id }}).select('-password -username')
+        const filteredUsers = await User.find({_id: { $ne: myUser._id }}).select('-password -username')
 
         return res.json({
             success: true,
@@ -23,6 +30,9 @@ export const get_users = async (req, res, next) => {
         })
 
     } catch (err) {
+
+        console.log(err)
+
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

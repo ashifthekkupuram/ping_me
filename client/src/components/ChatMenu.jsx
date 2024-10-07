@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Drawer, styled, useMediaQuery, useTheme, Divider } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { get_users } from '../redux/slices/conversationsSlice'
 
 import ChatCard from './ChatCard'
 
@@ -12,29 +14,37 @@ const CustomDrawer = styled(Drawer)(({ theme }) => ({
 
 const ChatMenu = () => {
 
-    const theme = useTheme()
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-    const chatMenu = useSelector((state) => state.chatMenu)
+  const dispatch = useDispatch()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
+  const chatMenu = useSelector((state) => state.chatMenu)
+  const token = useSelector((state) => state.auth.token)
+  const conversations = useSelector((state) => state.conversations)
+
+  const getUser = async () => {
+    setLoading(true)
+    setError(null)
+    const result = await dispatch(get_users({ token }))
+    if (!result.payload.success) {
+      console.log(result.payload.message)
+      setError(result.payload.message)
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [])
 
   return (
-    <CustomDrawer variant={isMobile ? 'temporary': 'permanent'} open={chatMenu} >
+    <CustomDrawer variant={isMobile ? 'temporary' : 'permanent'} open={chatMenu} >
       <Divider sx={{ marginTop: 8 }} >Chats</Divider>
-        <ChatCard name='ashi' />
-        <ChatCard name='ashi' />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
+      { conversations.map((conv) => <ChatCard name={conv.name.firstName} />) }
     </CustomDrawer>
   )
 }

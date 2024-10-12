@@ -10,9 +10,9 @@ import UserRouter from './routes/user.route.js'
 import { CONNECT_DB } from './config/database.js'
 import corsOptions from './config/corsOptions.js'
 
-dotenv.config()
+import { app, server } from './socket/socket.js'
 
-const app = express()
+dotenv.config()
 
 const PORT = process.env.PORT || 5000
 
@@ -26,7 +26,7 @@ app.use('/api/auth', AuthRouter)
 app.use('/api/coversation', ConversationRouter)
 app.use('/api/user', UserRouter)
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
     await CONNECT_DB()
     console.log(`Server runs on ${PORT}`)
 })

@@ -25,6 +25,8 @@ export const SocketContextProvider = ({ children }) => {
                 }
             })
 
+            console.log('Socket connection established with userId:', AuthData?._id)
+
             setSocket(socket)
 
             socket.on("getOnlineUsers", (users) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, styled, FormGroup, TextField, Button, TableHead, Avatar, Typography, Paper } from '@mui/material'
+import { Box, styled, FormGroup, TextField, Button, Avatar, Typography, Paper } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 
 import MessageLeft from './MessageLeft'
@@ -11,7 +11,7 @@ const ContainerBox = styled(Box)(({ theme }) => ({
     width: '100%',
 }))
 
-const CustomHeader = styled(TableHead)(({ theme }) => ({
+const CustomHeader = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -65,10 +65,10 @@ const ChatSection = () => {
             <HeaderContainer></HeaderContainer>
         </CustomHeader>
         <MessageBody elevation={0}>
-            {messages && messages.map((msg)=> <MessageRight message={msg} /> )}
+            {messages && messages.map((msg, index)=> <MessageRight key={index} message={msg} /> )}
         </MessageBody>
         <Box row sx={{display: 'flex',width: '100%'}}>
-            <TextField value={text} placeholder='Typing anything...' autoComplete={false} sx={{flex: 3}} onChange={onTextChange} />
+            <TextField value={text} placeholder='Typing anything...' sx={{flex: 3}} onChange={onTextChange} />
             <Button disabled={!text} variant='contained' onClick={addMessage}><SendIcon /></Button>
         </Box>
     </ContainerBox>

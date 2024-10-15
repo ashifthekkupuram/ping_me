@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { Box, styled, FormGroup, TextField, Button, Avatar, Typography, Paper } from '@mui/material'
+import { Box, styled, FormGroup, TextField, Button, Avatar, Typography, Paper, CircularProgress, Alert } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
+import { useSelector } from 'react-redux'
 
 import MessageLeft from './MessageLeft'
 import MessageRight from './MessageRight'
@@ -41,36 +42,45 @@ const MessageBody = styled(Paper)(({ theme }) => ({
     overflowY: 'scroll',
 }))
 
+const LoadingBox = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    width: '100%',
+    backgroundColor: theme.palette.background.default
+}))
+
 const ChatSection = () => {
 
     const [text, setText] = useState('')
-    const [messages, setMessages] = useState([])
+
+    const { id, conversation, error, loading } = useSelector((state) => state.conversation )
 
     const onTextChange = (e) => {
         setText(e.target.value)
     }
 
-    const addMessage = (e) => {
-        setMessages(prev => [...prev, text])
-        setText('')
+    const addMessage = async (e) => {
+        
     }
 
   return (
     <ContainerBox>
-        <CustomHeader>
+        {error ? <LoadingBox> <Alert severity="error">{error}</Alert> </LoadingBox> : loading ? <LoadingBox> <CircularProgress /> </LoadingBox> : !id ? <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox> : <><CustomHeader>
             <HeaderContainer>
                 <Avatar />
-                <HeaderTitle variant='h6'>Name</HeaderTitle>
+                <HeaderTitle variant='h6'>{ id && id }</HeaderTitle>
             </HeaderContainer>
             <HeaderContainer></HeaderContainer>
         </CustomHeader>
         <MessageBody elevation={0}>
-            {messages && messages.map((msg, index)=> <MessageRight key={index} message={msg} /> )}
+            {conversation && conversation.map((msg, index)=> <MessageRight key={index} message={msg} /> )}
         </MessageBody>
         <Box row sx={{display: 'flex',width: '100%'}}>
             <TextField value={text} placeholder='Typing anything...' sx={{flex: 3}} onChange={onTextChange} />
             <Button disabled={!text} variant='contained' onClick={addMessage}><SendIcon /></Button>
-        </Box>
+        </Box> </>}
     </ContainerBox>
   )
 }

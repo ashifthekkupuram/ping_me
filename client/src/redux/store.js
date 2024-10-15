@@ -5,6 +5,7 @@ import darkModeReducer from './slices/darkModeSlice'
 import chatMenuReducer from './slices/chatMenu'
 import conversationsReducer from './slices/conversationsSlice'
 import onlineReducer from './slices/onlineSlice'
+import conversationReducer from './slices/conversationSlice'
 
 export const store = configureStore({
     reducer: {
@@ -12,7 +13,8 @@ export const store = configureStore({
        darkMode: darkModeReducer,
        chatMenu: chatMenuReducer,
        conversations: conversationsReducer,
-       online: onlineReducer
+       online: onlineReducer,
+       conversation: conversationReducer
     },
     middleware: (getDefaultMiddleware) => 
         getDefaultMiddleware({

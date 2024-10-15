@@ -4,14 +4,16 @@ import axios from '../../api/axios'
 
 const initialState = {
     id: null,
-    conversation: []
+    conversation: [],
+    loading: false,
+    error: null
 }
 
 export const get_conversation = createAsyncThunk(
     'conversation/get_conversation',
     async ( credentials, { rejectWithValue } ) => {
         try {
-            const response = await axios.get(`/conversation/${credentials.userId}`, { headers: { authorization: `Bearer ${credentials.token}` } })
+            const response = await axios.get(`/coversation/${credentials.userId}/`, { headers: { authorization: `Bearer ${credentials.token}` } })
             return response.data
         } catch (err) {
             if(err.response){
@@ -32,11 +34,21 @@ const conversationSlice = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder
+        .addCase(get_conversation.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
         .addCase(get_conversation.fulfilled, (state, action) => {
-            // To be added
+            state.id = action.payload.userId
+            state.conversation = action.payload.messages
+            state.error = null
+            state.loading = false
         })
         .addCase(get_conversation.rejected, (state, action) => {
-            // To be added
+            state.id = null
+            state.conversation = []
+            state.error = action.payload?.message || 'An error occured'
+            state.loading = false
         })
     }
 })

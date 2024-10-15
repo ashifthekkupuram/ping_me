@@ -1,6 +1,8 @@
 import React from 'react'
 import { ListItem, Avatar, ListItemButton, ListItemAvatar, ListItemText, Badge, styled } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { get_conversation } from '../redux/slices/conversationSlice'
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -32,15 +34,21 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   }));
   
 
-const ChatCard = ({ name = 'Hello', id }) => {
+const ChatCard = ({ conv }) => {
 
     const onlineUsers = useSelector((state) => state.online.users)
-    const isOnline = onlineUsers.includes(id)
+    const isOnline = onlineUsers.includes(conv._id)
 
-    console.log(isOnline)
+    const token = useSelector((state) => state.auth.token)
+    const dispatch = useDispatch()
+
+    const onSubmit = async () => {
+      console.log('Clicled')
+      dispatch(get_conversation({ userId: conv._id, token, }))
+    }
 
     return (
-        <ListItem>
+        <ListItem onClick={onSubmit}>
             <ListItemButton>
                 <ListItemAvatar>
                     {isOnline ? <StyledBadge 
@@ -50,7 +58,7 @@ const ChatCard = ({ name = 'Hello', id }) => {
                             <Avatar />
                     </StyledBadge> : <Avatar />}
                 </ListItemAvatar>
-                <ListItemText primary={name} />
+                <ListItemText primary={`${conv.name.firstName} ${conv.name.secondName}`} />
             </ListItemButton>
         </ListItem>
     )

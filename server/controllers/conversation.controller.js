@@ -10,7 +10,7 @@ export const get_coversation = async (req, res, next) => {
 
         const { userId } = req.params
 
-        const senderId = jwt.verify(req.token, process.env.ACCESS_SECRET_KEY)._id
+        const senderId = jwt.verify(req.token, process.env.ACCESS_SECRET_KEY)._Id
 
         if(!senderId || !userId){
             return res.status(400).json({
@@ -31,10 +31,13 @@ export const get_coversation = async (req, res, next) => {
             })
         }
 
+        console.log('yes')
+
         return res.json({
             success: true,
             message: 'Messages retrieved',
-            messages: conversation.messages
+            messages: conversation.messages,
+            userId,
         })
 
     } catch(err) {

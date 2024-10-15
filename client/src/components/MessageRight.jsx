@@ -23,7 +23,7 @@ const Message = styled(Typography)(({ theme }) => ({
 const MessageRight = ({ message }) => {
   return (
     <MessageBox>
-      <Message>{message}</Message>
+      <Message>{message.message}</Message>
     </MessageBox>
   )
 }

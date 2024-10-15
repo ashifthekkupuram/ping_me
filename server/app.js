@@ -23,7 +23,7 @@ app.use(cors(corsOptions))
 
 //API routes
 app.use('/api/auth', AuthRouter)
-app.use('/api/coversation', ConversationRouter)
+app.use('/api/conversation', ConversationRouter)
 app.use('/api/user', UserRouter)
 
 server.listen(PORT, async () => {

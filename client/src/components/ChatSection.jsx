@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 import MessageLeft from './MessageLeft'
 import MessageRight from './MessageRight'
 
+import axios from '../api/axios'
+
 const ContainerBox = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -54,33 +56,53 @@ const LoadingBox = styled(Box)(({ theme }) => ({
 const ChatSection = () => {
 
     const [text, setText] = useState('')
+    const [textLoading, setTextLoading] = useState(false)
 
-    const { id, conversation, error, loading } = useSelector((state) => state.conversation )
+    const { user, conversation, error, loading } = useSelector((state) => state.conversation )
+    const token = useSelector((state) => state.auth.token )
+    const UserData = useSelector((state) => state.auth.UserData )
 
     const onTextChange = (e) => {
         setText(e.target.value)
     }
 
-    const addMessage = async (e) => {
-        
+    const onSubmit = async () => {
+        setTextLoading(true)
+        try{
+            const response = await axios.post(`/conversation/${user._id}`, { message: text.trim() }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        } catch(err) {
+            if(err.response){
+                console.log(err.response.data.message)
+            }else{
+                console.log('Internal Server Error')
+            }
+        } finally {
+            setTextLoading(false)
+        }
     }
+
+    console.log(conversation)
 
   return (
     <ContainerBox>
-        {error ? <LoadingBox> <Alert severity="error">{error}</Alert> </LoadingBox> : loading ? <LoadingBox> <CircularProgress /> </LoadingBox> : !id ? <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox> : <><CustomHeader>
+        {error ? <LoadingBox> <Alert severity="error">{error}</Alert> </LoadingBox> : loading ? <LoadingBox> <CircularProgress /> </LoadingBox> : user ? <><CustomHeader>
             <HeaderContainer>
                 <Avatar />
-                <HeaderTitle variant='h6'>{ id && id }</HeaderTitle>
+                <HeaderTitle variant='h6'>{ user && `${user.name.firstName} ${user.name.secondName}` }</HeaderTitle>
             </HeaderContainer>
             <HeaderContainer></HeaderContainer>
         </CustomHeader>
         <MessageBody elevation={0}>
-            {conversation && conversation.map((msg, index)=> <MessageRight key={index} message={msg} /> )}
+            {conversation.map((message) => UserData._id == message.sender ? <MessageRight key={message._id} message={message} /> : <MessageLeft key={message._id} message={message} />)}
         </MessageBody>
         <Box row sx={{display: 'flex',width: '100%'}}>
             <TextField value={text} placeholder='Typing anything...' sx={{flex: 3}} onChange={onTextChange} />
-            <Button disabled={!text} variant='contained' onClick={addMessage}><SendIcon /></Button>
-        </Box> </>}
+            <Button disabled={!text || textLoading} variant='contained' onClick={onSubmit}><SendIcon /></Button>
+        </Box> </> : <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox> }
     </ContainerBox>
   )
 }

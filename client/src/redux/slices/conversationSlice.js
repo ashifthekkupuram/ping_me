@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk, isRejectedWithValue } from '@reduxjs/too
 import axios from '../../api/axios'
 
 const initialState = {
-    id: null,
+    user: null,
     conversation: [],
     loading: false,
     error: null
@@ -13,7 +13,7 @@ export const get_conversation = createAsyncThunk(
     'conversation/get_conversation',
     async ( credentials, { rejectWithValue } ) => {
         try {
-            const response = await axios.get(`/coversation/${credentials.userId}/`, { headers: { authorization: `Bearer ${credentials.token}` } })
+            const response = await axios.get(`/conversation/${credentials.userId}/`, { headers: { authorization: `Bearer ${credentials.token}` } })
             return response.data
         } catch (err) {
             if(err.response){
@@ -39,13 +39,14 @@ const conversationSlice = createSlice({
             state.error = null
         })
         .addCase(get_conversation.fulfilled, (state, action) => {
-            state.id = action.payload.userId
+            console.log(action.payload.messages)
+            state.user = action.payload.user
             state.conversation = action.payload.messages
             state.error = null
             state.loading = false
         })
         .addCase(get_conversation.rejected, (state, action) => {
-            state.id = null
+            state.user = null
             state.conversation = []
             state.error = action.payload?.message || 'An error occured'
             state.loading = false

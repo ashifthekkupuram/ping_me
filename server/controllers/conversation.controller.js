@@ -19,25 +19,33 @@ export const get_coversation = async (req, res, next) => {
             })
         }
 
-        const conversation = await Conversation.findOne({
+        let conversation = await Conversation.findOne({
 			participants: { $all: [senderId, userId] },
 		}).populate("messages")
 
         if(!conversation){
-            return res.json({
-                success: true,
-                message: 'Chat yet to start',
-                messages: []
-            })
+
+            conversation = await Conversation.create({
+				participants: [senderId, userId],
+			})
+
+            await conversation.save()
+
+            conversation = await Conversation.findOne({
+                participants: { $all: [senderId, userId] },
+            }).populate("messages")
         }
 
-        console.log('yes')
+        const user = await User.findById(userId).select('-password')
 
         return res.json({
             success: true,
             message: 'Messages retrieved',
             messages: conversation.messages,
-            userId,
+            user: {
+                _id: user._id,
+                name: user.name
+            },
         })
 
     } catch(err) {
@@ -55,7 +63,7 @@ export const post_coversation = async (req, res, next) => {
         const { message } = req.body
         const { userId } = req.params
 
-        const senderId = jwt.verify(req.token, process.env.ACCESS_SECRET_KEY)._id
+        const senderId = jwt.verify(req.token, process.env.ACCESS_SECRET_KEY)._Id
 
         if(!senderId || !userId || !message){
             return res.status(400).json({
@@ -88,7 +96,8 @@ export const post_coversation = async (req, res, next) => {
 
         const newMessage = new Message({
             sender: senderId,
-            receiver: userId
+            receiver: userId,
+            message,
         })
 
         if (newMessage) {
@@ -108,6 +117,9 @@ export const post_coversation = async (req, res, next) => {
         })
 
     } catch(err) {
+
+        console.log(err)
+
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

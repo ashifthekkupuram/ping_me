@@ -21,7 +21,7 @@ const Message = styled(Typography)(({ theme }) => ({
 const MessageLeft = ({ message }) => {
   return (
     <MessageBox>
-      <Message >{message}</Message>
+      <Message >{message.message}</Message>
     </MessageBox>
   )
 }

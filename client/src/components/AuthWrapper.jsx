@@ -1,9 +1,13 @@
 import React,{ useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import { styled, Box, CircularProgress } from '@mui/material'
+import { io } from 'socket.io-client'
 
 import { refresh } from '../redux/slices/authSlice'
+import { setSocket, setOnline } from '../redux/slices/onlineSlice'
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 const LoadingBox = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -18,6 +22,8 @@ const AuthWrapper = () => {
 
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
+
+    const UserData = useSelector((state) => state.auth.UserData)
 
     useEffect(()=>{
         const refreshToken = async () => {
@@ -34,6 +40,30 @@ const AuthWrapper = () => {
         }
         refreshToken()
     },[])
+
+    useEffect(() => {
+        if(UserData){
+            const socket = io(BACKEND_URL, {
+                query: {
+                    userId: UserData?._id
+                }
+            })
+
+            dispatch(setSocket(socket))
+
+            socket.on("getOnlineUsers", (users) => {
+				dispatch(setOnline(users))
+			})
+
+            return () => socket?.close()
+
+        } else {
+
+            socket?.close()
+            dispatch(setSocket(null))
+
+        }
+    },[UserData])
     
   return (
     loading ? <LoadingBox> <CircularProgress /> </LoadingBox> : <Outlet />

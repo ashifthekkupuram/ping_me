@@ -25,8 +25,6 @@ const userSocketMap = {}
 
 io.on('connection', (socket) => {
 
-    console.log(ALLOWED_ORIGINS.split(' '))
-
     console.log("a user connected ", socket.id)
 
     const userId = socket.handshake.query.userId

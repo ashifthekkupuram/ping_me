@@ -5,6 +5,8 @@ import Conversation from '../models/coversation.model.js'
 import Message from '../models/message.model.js'
 import User from '../models/user.model.js'
 
+import { io, getReceiverSocketId } from '../socket/socket.js'
+
 export const get_coversation = async (req, res, next) => {
     try{
 
@@ -110,10 +112,15 @@ export const post_coversation = async (req, res, next) => {
         ])
 
         // Socket yet to setup
+        const receiverSocketId = getReceiverSocketId(userId)
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit('sendMessage', newMessage)
+        }
 
         return res.json({
             success: true,
-            message: 'Message sent'
+            message: 'Message sent',
+            newMessage
         })
 
     } catch(err) {

@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, styled, FormGroup, TextField, Button, Avatar, Typography, Paper, CircularProgress, Alert } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import MessageLeft from './MessageLeft'
 import MessageRight from './MessageRight'
 
 import axios from '../api/axios'
+import { sendMessage } from '../redux/slices/conversationSlice'
 
 const ContainerBox = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -61,6 +62,9 @@ const ChatSection = () => {
     const { user, conversation, error, loading } = useSelector((state) => state.conversation )
     const token = useSelector((state) => state.auth.token )
     const UserData = useSelector((state) => state.auth.UserData )
+    const socket = useSelector((state) => state.online.socket)
+
+    const dispatch = useDispatch()
 
     const onTextChange = (e) => {
         setText(e.target.value)
@@ -74,6 +78,9 @@ const ChatSection = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
+            dispatch(sendMessage(response.data.newMessage))
+            setText('')
+            window.scrollTo(0, document.body.scrollHeight)
         } catch(err) {
             if(err.response){
                 console.log(err.response.data.message)
@@ -85,7 +92,13 @@ const ChatSection = () => {
         }
     }
 
-    console.log(conversation)
+    useEffect(()=>{
+        socket?.on('sendMessage', (newMessage) => {
+            newMessage.shouldShake = true
+            dispatch(sendMessage(newMessage))
+            window.scrollTo(0, document.body.scrollHeight);
+        })
+    },[socket, sendMessage, conversation])
 
   return (
     <ContainerBox>

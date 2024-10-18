@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Box, styled, FormGroup, TextField, Button, Avatar, Typography, Paper, CircularProgress, Alert } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'react-hot-toast'
 
 import MessageLeft from './MessageLeft'
 import MessageRight from './MessageRight'
@@ -42,7 +43,7 @@ const MessageBody = styled(Paper)(({ theme }) => ({
     padding: 10,
     height: 'calc(100vh - 140px)',
     
-    overflowY: 'scroll',
+    overflowY: 'auto',
 }))
 
 const LoadingBox = styled(Box)(({ theme }) => ({
@@ -65,6 +66,7 @@ const ChatSection = () => {
     const socket = useSelector((state) => state.online.socket)
 
     const dispatch = useDispatch()
+    const MessageBodyRef = useRef(null)
 
     const onTextChange = (e) => {
         setText(e.target.value)
@@ -80,23 +82,28 @@ const ChatSection = () => {
             })
             dispatch(sendMessage(response.data.newMessage))
             setText('')
-            window.scrollTo(0, document.body.scrollHeight)
+            scrollToBottom()
         } catch(err) {
             if(err.response){
-                console.log(err.response.data.message)
+                toast.error(err.response.data.message)
             }else{
-                console.log('Internal Server Error')
+                toast.error('Internal Server Error')
             }
         } finally {
             setTextLoading(false)
         }
     }
 
+    const scrollToBottom = () => {
+        if (MessageBodyRef.current) {
+            MessageBodyRef.current.scrollTop = MessageBodyRef.current.scrollHeight
+        }
+      }
+
     useEffect(()=>{
         socket?.on('sendMessage', (newMessage) => {
             newMessage.shouldShake = true
             dispatch(sendMessage(newMessage))
-            window.scrollTo(0, document.body.scrollHeight);
         })
     },[socket, sendMessage, conversation])
 
@@ -109,7 +116,7 @@ const ChatSection = () => {
             </HeaderContainer>
             <HeaderContainer></HeaderContainer>
         </CustomHeader>
-        <MessageBody elevation={0}>
+        <MessageBody elevation={0} ref={MessageBodyRef}>
             {conversation.map((message) => UserData._id == message.sender ? <MessageRight key={message._id} message={message} /> : <MessageLeft key={message._id} message={message} />)}
         </MessageBody>
         <Box row sx={{display: 'flex',width: '100%'}}>

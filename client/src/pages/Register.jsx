@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Box, styled, TextField, Typography, Button, CircularProgress } from '@mui/material'
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast'
 
 import axios from '../api/axios'
 
@@ -86,8 +87,8 @@ const Register = () => {
         email: form.email.trim(),
         password: form.password,
        })
-       console.log(response.data.message)
        navigate('/login')
+       toast.success(response.data.message)
     } catch(err) {
       if(err.response){
         setError(err.response.data.message)

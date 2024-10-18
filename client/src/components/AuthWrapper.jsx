@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import { styled, Box, CircularProgress } from '@mui/material'
 import { io } from 'socket.io-client'
+import { Toaster, toast } from 'react-hot-toast'
 
 import { refresh } from '../redux/slices/authSlice'
 import { setSocket, setOnline } from '../redux/slices/onlineSlice'
@@ -25,19 +26,22 @@ const AuthWrapper = () => {
 
     const UserData = useSelector((state) => state.auth.UserData)
 
-    useEffect(()=>{
-        const refreshToken = async () => {
-            setLoading(true)
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            await dispatch(refresh()).then((result)=>{
-                if(result.payload.success){
-                    // Do nothing for now
-                }else{
-                    // Do nothing for now
+    const refreshToken = async () => {
+        setLoading(true)
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        await dispatch(refresh()).then((result)=>{
+            if(result.payload.success){
+               
+            }else{
+                if(result.payload.message === 'Forbidden'){
+                    toast.error('Session Expired')
                 }
-            })
-            setLoading(false)
-        }
+            }
+        })
+        setLoading(false)
+    }
+
+    useEffect(()=>{
         refreshToken()
     },[])
 
@@ -66,7 +70,7 @@ const AuthWrapper = () => {
     },[UserData])
     
   return (
-    loading ? <LoadingBox> <CircularProgress /> </LoadingBox> : <Outlet />
+    (loading) ? <LoadingBox> <CircularProgress /> </LoadingBox> : <> <Toaster position="top-right" reverseOrder={false} /> <Outlet /> </>
   )
 }
 

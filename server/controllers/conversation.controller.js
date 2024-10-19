@@ -106,9 +106,19 @@ export const post_coversation = async (req, res, next) => {
 			conversation.messages.push(newMessage._id);
 		}
 
+        if(!userExist.conversations.includes(receiverExist)){
+            userExist.conversations.push(receiverExist)
+        }
+
+        if(!receiverExist.conversations.includes(userExist)){
+            receiverExist.conversations.push(userExist)
+        }
+
         await Promise.all([
             conversation.save(),
-            newMessage.save()
+            newMessage.save(),
+            userExist.save(),
+            receiverExist.save()
         ])
 
         // Socket yet to setup

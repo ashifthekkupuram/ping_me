@@ -87,16 +87,9 @@ const NavBar = () => {
   const dispatch = useDispatch()
 
   const onLogout = async () => {
-    try{
-      const response = await dispatch(logout())
-      toast.success(response.data.message)
-    }catch(err){
-      if(err.response){
-        toast.error(err.response)
-      }else{
-        toast.error('Internal Server Error')
-      }
-    }
+      const result = await dispatch(logout())
+      console.log(result)
+      toast.success(result.payload.message)
     
   }
 

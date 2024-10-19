@@ -7,6 +7,7 @@ import { Toaster, toast } from 'react-hot-toast'
 
 import { refresh } from '../redux/slices/authSlice'
 import { setSocket, setOnline } from '../redux/slices/onlineSlice'
+import UserAddModal from './UserAddModal'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
@@ -70,7 +71,7 @@ const AuthWrapper = () => {
     },[UserData])
     
   return (
-    (loading) ? <LoadingBox> <CircularProgress /> </LoadingBox> : <> <Toaster position="top-right" reverseOrder={false} /> <Outlet /> </>
+    (loading) ? <LoadingBox> <CircularProgress /> </LoadingBox> : <> <Toaster position="top-right" reverseOrder={false} /> <UserAddModal /> <Outlet /> </>
   )
 }
 

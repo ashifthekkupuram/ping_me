@@ -26,6 +26,11 @@ const UserSchema = new Schema({
             minLength: 2
         }
     },
+    conversations: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: []
+    }],
     bio: {
         type: String
     },

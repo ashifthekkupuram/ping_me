@@ -92,7 +92,7 @@ export const post_coversation = async (req, res, next) => {
 
 		if (!conversation) {
 			conversation = await Conversation.create({
-				participants: [senderId, receiverId],
+				participants: [senderId, userId],
 			})
 		}
 
@@ -106,11 +106,11 @@ export const post_coversation = async (req, res, next) => {
 			conversation.messages.push(newMessage._id);
 		}
 
-        if(!userExist.conversations.includes(receiverExist)){
+        if(!userExist.conversations.includes(receiverExist._id)){
             userExist.conversations.push(receiverExist)
         }
 
-        if(!receiverExist.conversations.includes(userExist)){
+        if(!receiverExist.conversations.includes(userExist._id)){
             receiverExist.conversations.push(userExist)
         }
 

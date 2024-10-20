@@ -9,6 +9,7 @@ import { toast } from 'react-hot-toast'
 import { toggleTheme } from '../redux/slices/darkModeSlice'
 import { toggleMenu } from '../redux/slices/chatMenu'
 import { logout } from '../redux/slices/authSlice'
+import { setAddUser } from '../redux/slices/addUserSlice'
 
 const CustomAppBar = styled(AppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1
@@ -109,6 +110,10 @@ const NavBar = () => {
     setMenu(false)
   }
 
+  const onAddChat = () => {
+    dispatch(setAddUser({ open: true }))
+  }
+
   return (
     <CustomAppBar position='sticky'>
       <CustomToolBar>
@@ -131,6 +136,7 @@ const NavBar = () => {
           </IconButton>
           </Tooltip>
           <CustomMenu open={menu} id='account-menu' onClose={onCloseMenu} anchorOrigin={{ horizontal: 'right', vertical: 'top' }}>
+            <MenuItem onClick={onAddChat}>Add Chat</MenuItem>
             <MenuItem onClick={onLogout}>Logout</MenuItem>
           </CustomMenu>
         </Section>

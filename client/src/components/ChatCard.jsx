@@ -58,7 +58,7 @@ const ChatCard = ({ conv }) => {
                             <Avatar />
                     </StyledBadge> : <Avatar />}
                 </ListItemAvatar>
-                <ListItemText primary={`${conv.name.firstName} ${conv.name.secondName}`} />
+                <ListItemText primary={`${conv?.name?.firstName} ${conv?.name?.secondName}`} />
             </ListItemButton>
         </ListItem>
     )

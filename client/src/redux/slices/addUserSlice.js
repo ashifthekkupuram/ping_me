@@ -10,8 +10,8 @@ const addUserSlice = createSlice({
     initialState,
     reducers: {
         setAddUser: (state, action) => {
-            state.open = action.open || false
-            state.result = action.result || null
+            state.open = action.payload.open || false
+            state.result = action.payload.result || null
         }
     }
 })

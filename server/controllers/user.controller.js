@@ -11,7 +11,7 @@ export const find_user = async (req, res, next) => {
     try{
         const { username } = req.params
 
-        const user = await User.findById(jwt.verify(req.token, ACCESS_SECRET_KEY)._id)
+        const user = await User.findById(jwt.verify(req.token, ACCESS_SECRET_KEY)._Id)
 
         const foundUser = await User.findOne({
             username: username.toLowerCase(),
@@ -25,10 +25,9 @@ export const find_user = async (req, res, next) => {
         }
 
         if(user.conversations.includes(foundUser._id)){
-            return res.json({
-                success: true,
-                message: 'User already in your conversations',
-                user: foundUser
+            return res.status(400).json({
+                success: false,
+                message: `User already in your conversations as ${foundUser.name.firstName} ${foundUser.name.secondName}`,
             })
         }
 
@@ -40,6 +39,11 @@ export const find_user = async (req, res, next) => {
 
     } catch(err) {
 
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrongg',
+            error: err
+        })
     }
 }
 
@@ -48,7 +52,7 @@ export const get_users = async (req, res, next) => {
 
         const user = await jwt.verify(req.token, ACCESS_SECRET_KEY)
 
-        const myUser = await User.findById(user._Id).populate('conversations','password')
+        const myUser = await User.findById(user._Id).populate('conversations','-password')
 
         if(!myUser){
             return res.status(400).json({

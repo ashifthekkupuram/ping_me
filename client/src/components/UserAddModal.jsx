@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { Modal, Box, Typography, TextField, Button, Avatar } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'react-hot-toast'
 
 import { setAddUser } from '../redux/slices/addUserSlice'
+import axios from '../api/axios'
+import { newConv } from '../redux/slices/conversationsSlice'
+import { get_conversation } from '../redux/slices/conversationSlice'
 
 const style = {
     position: 'absolute',
@@ -23,6 +27,7 @@ const UserAddModal = () => {
     const [text, setText] = useState('')
 
     const { open, result } = useSelector((state) => state.addUser)
+    const token = useSelector((state) => state.auth.token)
 
     const dispatch = useDispatch()
 
@@ -34,9 +39,39 @@ const UserAddModal = () => {
 
     const onFind = async () => {
         try{
-            console.log('asdsad')
+            const response = await axios.get(`/user/${username}`, {headers: {
+                Authorization: `Bearer ${token}`
+            }})
+            dispatch(setAddUser({ open: true, result: response.data.user }))
+        } catch(err) {
+            if(err.response){
+                toast.error(err.response.data.message)
+            }else{
+                toast.error('Internal Server Error')
+            }
+        }
+    }
+
+    const onMessage = async () => {
+        try{
+            const response = await axios.post(`/conversation/${result._id}`, { message: text.trim() }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setText('')
+            dispatch(newConv(result))
+            dispatch(get_conversation({ token, userId: result._id }))
+            dispatch(setAddUser({}))
         } catch(err) {
 
+            console.log(err)
+
+            if(err.response){
+                toast.error(err.response.data.message)
+            }else{
+                toast.error('Internal Server Error')
+            }
         }
     }
 
@@ -53,9 +88,9 @@ const UserAddModal = () => {
                 </Typography>
                 <Box>
                     {result ? <>
-                        result.username
+                        {result.username}
                         <TextField type='text' value={text} placeholder='send message...' onChange={(e) => setText(e.target.value)} />
-                        <Button variant='contained' >Send</Button>
+                        <Button variant='contained' onClick={onMessage} >Send</Button>
                     </> : <>
                         <TextField sx={{ height: '30px' }} type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder='username...' />
                         <Button variant='contained' onClick={onFind} >Find</Button>

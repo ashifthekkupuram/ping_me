@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { useSelector } from 'react-redux'
 
-import { Home, Login, Register, Landing } from './pages'
+import { Home, Login, Register, Landing, Profile } from './pages'
 import NavWrapper from './components/NavWrapper'
 import AuthRedirect from './components/AuthRedirect'
 import AuthRequired from './components/AuthRequired'
@@ -35,6 +35,10 @@ const App = () => {
                 {
                   path: '/',
                   element: <Home />
+                },
+                {
+                  path: '/profile',
+                  element: <Profile />
                 }
               ]
             }

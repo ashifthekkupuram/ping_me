@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem, Avatar, ListItemButton, ListItemAvatar, ListItemText, Badge, styled } from '@mui/material'
+import { ListItem, Avatar, ListItemButton, ListItemAvatar, ListItemText, Badge, styled, capitalize } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { get_conversation } from '../redux/slices/conversationSlice'
@@ -58,7 +58,7 @@ const ChatCard = ({ conv }) => {
                             <Avatar />
                     </StyledBadge> : <Avatar />}
                 </ListItemAvatar>
-                <ListItemText primary={`${conv?.name?.firstName} ${conv?.name?.secondName}`} />
+                <ListItemText primary={`${capitalize(conv?.name?.firstName)} ${capitalize(conv?.name?.secondName)}`} />
             </ListItemButton>
         </ListItem>
     )

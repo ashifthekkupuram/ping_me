@@ -5,6 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 import { toggleTheme } from '../redux/slices/darkModeSlice'
 import { toggleMenu } from '../redux/slices/chatMenu'
@@ -86,6 +87,7 @@ const NavBar = () => {
   const darkMode = useSelector((state) => state.darkMode)
   const UserData = useSelector((state) => state.auth.UserData)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const onLogout = async () => {
       const result = await dispatch(logout())
@@ -114,6 +116,14 @@ const NavBar = () => {
     dispatch(setAddUser({ open: true }))
   }
 
+  const onProfile = () => {
+    navigate('/profile')
+  }
+
+  const onHome = () => {
+    navigate('/')
+  }
+
   return (
     <CustomAppBar position='sticky'>
       <CustomToolBar>
@@ -136,7 +146,9 @@ const NavBar = () => {
           </IconButton>
           </Tooltip>
           <CustomMenu open={menu} id='account-menu' onClose={onCloseMenu} anchorOrigin={{ horizontal: 'right', vertical: 'top' }}>
+            <MenuItem onClick={onHome}>Home</MenuItem>
             <MenuItem onClick={onAddChat}>Add Chat</MenuItem>
+            <MenuItem onClick={onProfile}>Profile</MenuItem>
             <MenuItem onClick={onLogout}>Logout</MenuItem>
           </CustomMenu>
         </Section>

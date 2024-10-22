@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Box, styled, FormGroup, TextField, Button, Avatar, Typography, Paper, CircularProgress, Alert } from '@mui/material'
+import { Box, styled, FormGroup, TextField, Button, Avatar, Typography, Paper, CircularProgress, Alert, capitalize } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-hot-toast'
@@ -114,7 +114,7 @@ const ChatSection = () => {
         {error ? <LoadingBox> <Alert severity="error">{error}</Alert> </LoadingBox> : loading ? <LoadingBox> <CircularProgress /> </LoadingBox> : user ? <><CustomHeader>
             <HeaderContainer>
                 <Avatar />
-                <HeaderTitle variant='h6'>{ user && `${user.name.firstName} ${user.name.secondName}` }</HeaderTitle>
+                <HeaderTitle variant='h6'>{ user && `${capitalize(user.name.firstName)} ${capitalize(user.name.secondName)}` }</HeaderTitle>
             </HeaderContainer>
             <HeaderContainer></HeaderContainer>
         </CustomHeader>

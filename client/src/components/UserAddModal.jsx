@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, Box, Typography, TextField, Button, Avatar } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-hot-toast'
@@ -28,6 +28,8 @@ const UserAddModal = () => {
 
     const { open, result } = useSelector((state) => state.addUser)
     const token = useSelector((state) => state.auth.token)
+    const socket = useSelector((state) => state.online.socket)
+    const conversations = useSelector((state) => state.conversations)
 
     const dispatch = useDispatch()
 
@@ -74,6 +76,17 @@ const UserAddModal = () => {
             }
         }
     }
+
+    useEffect(()=>{
+
+        socket?.on('addChat', (Conv) => {
+            newConv.shouldShake = true
+            dispatch(newConv(Conv))
+        })
+
+        return () => socket?.off('addChat')
+
+    },[socket, newConv])
 
     return (
         <Modal

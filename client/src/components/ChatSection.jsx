@@ -105,6 +105,8 @@ const ChatSection = () => {
             newMessage.shouldShake = true
             dispatch(sendMessage(newMessage))
         })
+
+        return () => socket?.off('sendMessage')
     },[socket, sendMessage, conversation])
 
   return (

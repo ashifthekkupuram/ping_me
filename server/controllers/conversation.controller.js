@@ -75,8 +75,8 @@ export const post_coversation = async (req, res, next) => {
         }
 
         const [userExist, receiverExist] = await Promise.all([
-            User.findById(senderId),
-            User.findById(userId),
+            User.findById(senderId).select('-password'),
+            User.findById(userId).select('-password'),
         ])
 
         if(!userExist || !receiverExist){
@@ -112,6 +112,11 @@ export const post_coversation = async (req, res, next) => {
 
         if(!receiverExist.conversations.includes(userExist._id)){
             receiverExist.conversations.push(userExist)
+
+            const receiverSocketId = getReceiverSocketId(userId)
+            if(receiverSocketId){
+                io.to(receiverSocketId).emit('addChat', userExist)
+            }
         }
 
         await Promise.all([

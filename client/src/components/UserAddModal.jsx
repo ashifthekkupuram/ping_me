@@ -86,7 +86,7 @@ const UserAddModal = () => {
 
         return () => socket?.off('addChat')
 
-    },[socket, newConv])
+    },[socket, newConv, conversations])
 
     return (
         <Modal

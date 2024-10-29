@@ -50,7 +50,7 @@ export const find_user = async (req, res, next) => {
 export const get_users = async (req, res, next) => {
     try{
 
-        const user = await jwt.verify(req.token, ACCESS_SECRET_KEY)
+        const user = jwt.verify(req.token, ACCESS_SECRET_KEY)
 
         const myUser = await User.findById(user._Id).populate('conversations','-password')
 
@@ -74,6 +74,109 @@ export const get_users = async (req, res, next) => {
 
         console.log(err)
 
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    }
+}
+
+export const update_name = async () => {
+    try{
+
+        const { name } = req.body
+
+        if(!name){
+            return res.status(400).json({
+                success: false,
+                message: 'Name is required'
+            })
+        }
+
+        const user = jwt.verify(req.token, ACCESS_SECRET_KEY)
+
+        const myUser = await User.findById(user._Id)
+
+        if(!myUser){
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(user._id, { name }, { new:  true })
+
+        return res.json({
+            success: true,
+            message: 'User name updated',
+            updatedUser: {
+                _id: updatedUser._id,
+                email: updatedUser.email,
+                username: updatedUser.username,
+                name: updatedUser.name,
+                bio: updatedUser.bio
+            }
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    }
+}
+
+export const update_username = async () => {
+    try{
+
+        const { username } = req.body
+
+        if(!username){
+            return res.status(400).json({
+                success: false,
+                message: 'Username is required'
+            })
+        }
+
+        const user = jwt.verify(req.token, ACCESS_SECRET_KEY)
+
+        const myUser = await User.findById(user._Id)
+
+        if(!myUser){
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+
+        const usernameExist = await User.findOne({ username, _id: {
+            $ne: myUser._id
+        } })
+
+        if(usernameExist){
+            return res.status(400).json({
+                success: false,
+                message: 'Username already exist'
+            })
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(user._id, { username }, { new: true })
+
+        return res.json({
+            success: true,
+            message: 'User username updated',
+            updatedUser: {
+                _id: updatedUser._id,
+                email: updatedUser.email,
+                username: updatedUser.username,
+                name: updatedUser.name,
+                bio: updatedUser.bio
+            }
+        })
+
+    } catch (err) {
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

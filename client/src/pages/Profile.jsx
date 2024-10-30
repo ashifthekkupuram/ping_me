@@ -18,11 +18,13 @@ const MainBox = styled(Box)(({ theme }) => ({
 const ContainerBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
+  gap: '8px',
+  padding: '50px 25px',
   backgroundColor: theme.palette.primary.contrastText,
-  color: theme.palette.text.primary,
-  padding: 20,
-  borderRadius: 5
+  borderRadius: '10px',
+  boxShadow: theme.shadows[3],
+  width: '300px',
+  color: theme.palette.text.primary
 }))
 
 const Divider = styled(Box)(({ them }) => ({
@@ -33,15 +35,15 @@ const Divider = styled(Box)(({ them }) => ({
   gap: 10
 }))
 
-const Name = styled(Typography)(({}) => ({
+const Name = styled(Typography)(({ }) => ({
   fontSize: 28,
 }))
 
-const Username = styled(Typography)(({}) => ({
+const Username = styled(Typography)(({ }) => ({
   fontSize: 20,
 }))
 
-const CustomButton = styled(Button)(({}) => ({
+const CustomButton = styled(Button)(({ }) => ({
   height: 30,
   width: 10,
   padding: 2
@@ -59,7 +61,7 @@ const Profile = () => {
         <Divider sx={{ alignSelf: 'center' }} > <Avatar sx={{ width: 68, height: 68, }} /> </Divider>
         <Divider> <Name variant='h1'>{capitalize(name?.firstName)} {capitalize(name?.secondName)}</Name> <CustomButton variant='contained' onClick={() => navigate('/name')} > <EditIcon /> </CustomButton> </Divider>
         <Divider> <Username variant='h6'>@{username}</Username> <CustomButton variant='contained' onClick={() => navigate('/username')} > <EditIcon /> </CustomButton> </Divider>
-        <Divider sx={{ alignSelf: 'center' }} > <Button variant='contained' >Change Password</Button></Divider>
+        <Divider sx={{ alignSelf: 'center' }} > <Button variant='contained' onClick={() => navigate('/change-password')} >Change Password</Button></Divider>
       </ContainerBox>
     </MainBox>
   )

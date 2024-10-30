@@ -1,11 +1,14 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import bcrypt from 'bcryptjs'
 
 import User from '../models/user.model.js'
 
 dotenv.config()
 
 const ACCESS_SECRET_KEY = process.env.ACCESS_SECRET_KEY
+
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\S]{8,}$/
 
 export const find_user = async (req, res, next) => {
     try{
@@ -182,6 +185,74 @@ export const update_username = async (req, res, next) => {
         })
 
     } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    }
+}
+
+export const change_password = async (req, res, next) => {
+    try{
+
+        const { oldPassword, newPassword } = req.body
+
+        if(!oldPassword || !newPassword){
+            return res.status(400).json({
+                success: false,
+                message: 'Old Password and New Password is required'
+            })
+        }
+
+        const user = jwt.verify(req.token, ACCESS_SECRET_KEY)
+
+        const myUser = await User.findById(user._Id)
+
+        if(!myUser){
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+
+        const match = bcrypt.compareSync(oldPassword, myUser.password)
+
+        if(match){
+
+            if(!newPassword.match(PASSWORD_REGEX)){
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid Password'
+                })
+            }
+
+            bcrypt.hash(newPassword, 12, async (err, hashedPassword) => {
+                if(err){
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Something went wrong',
+                        error: err
+                    })
+                }else{
+                    await User.findByIdAndUpdate(user._Id, { password: hashedPassword })
+
+                    return res.json({
+                        success: true,
+                        message: 'Password Changed'
+                    })
+
+                }
+            })
+
+        }else{
+            return res.status(400).json({
+                success: false,
+                message: 'Enter the correct Old Password'
+            })
+        }
+
+    } catch(err) {
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

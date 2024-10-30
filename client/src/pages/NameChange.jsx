@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, TextField, Button, CircularProgress, styled, capitalize } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+
+import axios from '../api/axios'
+import { updateUserData } from '../redux/slices/authSlice'
 
 const MainBox = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -37,13 +42,13 @@ const ChangeButton = styled(Button)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     '&:hover': {
-      backgroundColor: theme.palette.primary.dark,
+        backgroundColor: theme.palette.primary.dark,
     },
     '&.Mui-disabled': {
-    backgroundColor: theme.palette.action.disabledBackground,
-    color: theme.palette.action.disabled
-  },
-  }))
+        backgroundColor: theme.palette.action.disabledBackground,
+        color: theme.palette.action.disabled
+    },
+}))
 
 const NameChange = () => {
 
@@ -54,11 +59,45 @@ const NameChange = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
-    const {name : UserDataName}  = useSelector((state) => state.auth.UserData)
+    const { name: UserDataName } = useSelector((state) => state.auth.UserData)
+    const token = useSelector((state) => state.auth.token)
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const onChange = (e) => {
-        setName(prev => ({...prev, [e.target.id]: e.target.value}))
+        setName(prev => ({ ...prev, [e.target.id]: e.target.value }))
     }
+
+    const onSubmit = async (e) => {
+        setError(null)
+        setLoading(true)
+        try {
+            const response = await axios.put('/user/name', {
+                name: {
+                    firstName: name.firstName.trim(),
+                    secondName: name.secondName.trim()
+                }
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            dispatch(updateUserData(response.data.updatedUser))
+            navigate('/profile')
+            toast.success(response.data.message)
+        } catch (err) {
+            if (err.response) {
+                setError(err.response.data.message)
+            } else {
+                setError('Internal Server Error')
+            }
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const disabled = loading || !name.firstName || !name.secondName || (name.firstName === UserDataName.firstName && name.firstName === UserDataName.secondName)
 
     useEffect(() => {
         setName({ firstName: UserDataName.firstName, secondName: UserDataName.secondName })
@@ -68,9 +107,9 @@ const NameChange = () => {
         <MainBox>
             <FormBox>
                 <Title variant='h4'>Name Change</Title>
-                <TextField type='text' value={name.firstName} variant='outlined' name='firstName' id='firstName' label='First Name' onChange={onChange} error={error} helperText={error} required fullWidth />
-                <TextField type='text' value={name.secondName} variant='outlined' name='secondName' id='secondName' label='Second Name' onChange={onChange} error={error} helperText={error} required fullWidth />
-                <ChangeButton disabled={loading || !name.firstName || !name.secondName || (name.firstName === UserDataName.firstName && name.firstName === UserDataName.secondName)} >{ loading ? <CircularProgress size={24} /> : 'Change'}</ChangeButton>
+                <TextField type='text' value={name.firstName} variant='outlined' name='firstName' id='firstName' label='First Name' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
+                <TextField type='text' value={name.secondName} variant='outlined' name='secondName' id='secondName' label='Second Name' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
+                <ChangeButton disabled={disabled} onClick={onSubmit} >{loading ? <CircularProgress size={24} /> : 'Change'}</ChangeButton>
             </FormBox>
         </MainBox>
     )

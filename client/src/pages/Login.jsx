@@ -97,7 +97,7 @@ const Login = () => {
         <TextField type='email' value={form.email} variant='outlined' name='email' id='email' label='Email' onChange={onChange} error={error} helperText={error} required fullWidth />
         <TextField type='password' value={form.password} variant='outlined' name='password' id='password' label='Password' onChange={onChange} error={error} helperText={error} required fullWidth />
         <LoginButton disabled={loading || !form.email || !form.password} onClick={onSubmit} >{ loading ? <CircularProgress size={24} /> : 'Login'}</LoginButton>
-        <CustomLink variant='small' onClick={(e)=>navigate('/')}>Forgot password?</CustomLink>
+        <CustomLink variant='small' onClick={(e)=>navigate('/reset-password')}>Forgot password?</CustomLink>
         <CustomLink variant='small' onClick={(e)=>navigate('/register')}>Don't have an account?</CustomLink>
       </FormBox> 
     </MainBox>

@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
+import User from '../models/user.model.js'
+
 const isAuthenticated = async (req, res, next) => {
     try{
 
@@ -22,7 +24,7 @@ const isAuthenticated = async (req, res, next) => {
             })
         }
 
-        jwt.verify(token, process.env.ACCESS_SECRET_KEY, (err, result) => {
+        jwt.verify(token, process.env.ACCESS_SECRET_KEY, async (err, result) => {
             if(err){
                 return res.status(400).json({
                     success: false,
@@ -32,6 +34,23 @@ const isAuthenticated = async (req, res, next) => {
             }
 
             if(result){
+
+                const user = await User.findById(result._Id)
+
+                if(!user){
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Account not found'
+                    })
+                }
+
+                if(!user.verified){
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Account is not verified'
+                    })
+                }
+
                 req.token = token
                 next()
             }else{

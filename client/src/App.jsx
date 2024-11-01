@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { useSelector } from 'react-redux'
 
-import { Home, Login, Register, Landing, Profile, NameChange, UsernameChange, PasswordChange, ResetPassword, ResetConfirmPassword } from './pages'
+import { Home, Login, Register, Landing, Profile, NameChange, UsernameChange, PasswordChange, ResetPassword, ResetConfirmPassword, Verification } from './pages'
 import NavWrapper from './components/NavWrapper'
 import AuthRedirect from './components/AuthRedirect'
 import AuthRequired from './components/AuthRequired'
@@ -79,6 +79,10 @@ const App = () => {
             {
               path: '/reset-password-confirm/:token',
               element: <ResetConfirmPassword />
+            },
+            {
+              path: '/verification/:token',
+              element: <Verification />
             }
           ]
         },

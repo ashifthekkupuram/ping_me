@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
 import User from '../models/user.model.js'
+import Verification from '../models/verification.model.js'
+
+import transporter from '../utils/mail.js'
 
 dotenv.config()
 
@@ -30,6 +33,31 @@ export const login = async (req, res, next) => {
             return res.status(400).json({
                 success: false,
                 message: 'Invalid user credentials'
+            })
+        }
+
+        if(!user.verified){
+
+            await Verification.updateMany({ user }, { expired: true })
+
+            const verification = new Verification({ user })
+            const URL = process.env.ALLOWED_ORIGINS.split(' ')
+
+            await Promise.all([
+                await verification.save(),
+                await transporter.sendMail({
+                    from: process.env.EMAIL,
+                    to: user.email,
+                    subject: 'Account Verification',
+                    text: 'To Verify or Delete account if it\'s not you',
+                    html: `<a href='${URL[0]}/verification/${verification.token}'>Click here</a>`
+                })
+            ])
+
+
+            return res.status(400).json({
+                success: false,
+                message: 'Account not verified(New verification link has been sended to gmail)'
             })
         }
 
@@ -137,11 +165,25 @@ export const register = async (req, res, next) => {
                     password: hashedPassword
                 })
 
-                await user.save()
+                const verification = new Verification({ user })
+
+                const URL = process.env.ALLOWED_ORIGINS.split(' ')
+
+                await Promise.all([
+                    await verification.save(),
+                    await user.save(),
+                    await transporter.sendMail({
+                        from: process.env.EMAIL,
+                        to: user.email,
+                        subject: 'Account Verification',
+                        text: 'To Verify or Delete account if it\'s not you',
+                        html: `<a href='${URL[0]}/verification/${verification.token}'>Click here</a>`
+                    })
+                ])
 
                 return res.json({
                     success: false,
-                    message: 'User has been created'
+                    message: 'User has been created(Check your email to verify)'
                 })
 
             }else{

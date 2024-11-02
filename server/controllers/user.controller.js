@@ -260,3 +260,84 @@ export const change_password = async (req, res, next) => {
         })
     }
 }
+
+export const add_profile = async (req, res, next) => {
+    try{
+
+        const profile = req.file
+
+        const user = jwt.verify(req.token, ACCESS_SECRET_KEY)
+
+        const myUser = await User.findById(user._Id)
+
+        if(!myUser){
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(user._Id, { profile: profile.filename }, { new: true })
+
+        return res.json({
+            success: true,
+            message: 'Profile added',
+            updatedUser: {
+                _id: updatedUser._id,
+                email: updatedUser.email,
+                username: updatedUser.username,
+                name: updatedUser.name,
+                bio: updatedUser.bio,
+                profile: updatedUser.profile
+            }
+        })
+
+    } catch(err) {
+
+        console.log(err)
+
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    }
+}
+
+export const remove_profile = async (req, res, next) => {
+    try{
+
+        const user = jwt.verify(req.token, ACCESS_SECRET_KEY)
+
+        const myUser = await User.findById(user._Id)
+
+        if(!myUser){
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(user._Id, { profile: '' }, { new: true })
+
+        return res.json({
+            success: true,
+            message: 'Profile removed',
+            updatedUser: {
+                _id: updatedUser._id,
+                email: updatedUser.email,
+                username: updatedUser.username,
+                name: updatedUser.name,
+                bio: updatedUser.bio,
+                profile: ''
+            }
+        })
+
+    } catch(err) {
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    }
+}

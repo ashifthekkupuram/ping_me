@@ -1,8 +1,12 @@
-import React from 'react'
-import { Box, styled, Avatar, Typography, Button, capitalize } from '@mui/material'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
-import EditIcon from '@mui/icons-material/Edit';
+import React, { useRef, useState } from 'react'
+import { Box, styled, Avatar, Typography, Button, IconButton, CircularProgress, capitalize } from '@mui/material'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import EditIcon from '@mui/icons-material/Edit'
+import { toast } from 'react-hot-toast'
+
+import axios from '../api/axios'
+import { updateUserData } from '../redux/slices/authSlice'
 
 const MainBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -51,14 +55,72 @@ const CustomButton = styled(Button)(({ }) => ({
 
 const Profile = () => {
 
-  const { name, username } = useSelector((state) => state.auth.UserData)
+  const [loading, setLoading] = useState(false)
+
+  const { name, username, profile } = useSelector((state) => state.auth.UserData)
+  const token = useSelector((state) => state.auth.token)
+
+  const ImageField = useRef(null)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const onChange = async (e) => {
+    setLoading(true)
+    try {
+      const formData = new FormData()
+      formData.append('profile', e.target.files[0])
+      const response = await axios.post('/user/profile', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      dispatch(updateUserData(response.data.updatedUser))
+      toast.success(response.data.message)
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message)
+      } else {
+        toast.error('Internal Server Error')
+      }
+    } finally {
+      setLoading(false)
+      if (ImageField.current) {
+        ImageField.current.value = null
+      }
+    }
+  }
+
+  const onRemove = async () => {
+    try {
+      const response = await axios.delete('/user/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      dispatch(updateUserData(response.data.updatedUser))
+      toast.success(response.data.message)
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message)
+      } else {
+        toast.error('Internal Server Error')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <MainBox>
       <ContainerBox>
-        <Divider sx={{ alignSelf: 'center' }} > <Avatar sx={{ width: 68, height: 68, }} /> </Divider>
+        <Divider sx={{ alignSelf: 'center' }} >
+          <IconButton onClick={() => ImageField.current.click()}>
+            {loading ? <CircularProgress size={25} /> : <Avatar src={profile && `${import.meta.env.VITE_BACKEND_URL}/images/profiles/${profile}`} sx={{ width: 68, height: 68, }} />}
+          </IconButton>
+          <input ref={ImageField} value={null} style={{ display: 'none' }} type="file" onChange={onChange} />
+        </Divider>
+        {profile && <Divider sx={{ alignSelf: 'center' }} > <Button variant='contained' color='error' onClick={onRemove} >Remove Profile</Button></Divider>}
         <Divider> <Name variant='h1'>{capitalize(name?.firstName)} {capitalize(name?.secondName)}</Name> <CustomButton variant='contained' onClick={() => navigate('/name')} > <EditIcon /> </CustomButton> </Divider>
         <Divider> <Username variant='h6'>@{username}</Username> <CustomButton variant='contained' onClick={() => navigate('/username')} > <EditIcon /> </CustomButton> </Divider>
         <Divider sx={{ alignSelf: 'center' }} > <Button variant='contained' onClick={() => navigate('/change-password')} >Change Password</Button></Divider>

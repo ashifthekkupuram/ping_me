@@ -32,7 +32,12 @@ const UserSchema = new Schema({
         default: []
     }],
     bio: {
-        type: String
+        type: String,
+        default: ''
+    },
+    profile: {
+        type: String,
+        default: ''
     },
     verified: {
         type: Boolean,

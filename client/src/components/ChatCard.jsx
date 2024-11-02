@@ -55,8 +55,8 @@ const ChatCard = ({ conv }) => {
                         overlap="circular"
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                         variant="dot">
-                            <Avatar />
-                    </StyledBadge> : <Avatar />}
+                            <Avatar src={conv.profile && `${import.meta.env.VITE_BACKEND_URL}/images/profiles/${conv.profile}`} />
+                    </StyledBadge> : <Avatar src={conv.profile && `${import.meta.env.VITE_BACKEND_URL}/images/profiles/${conv.profile}`} />}
                 </ListItemAvatar>
                 <ListItemText primary={`${capitalize(conv?.name?.firstName)} ${capitalize(conv?.name?.secondName)}`} />
             </ListItemButton>

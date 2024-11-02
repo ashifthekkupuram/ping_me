@@ -113,7 +113,7 @@ const ChatSection = () => {
     <ContainerBox>
         {error ? <LoadingBox> <Alert severity="error">{error}</Alert> </LoadingBox> : loading ? <LoadingBox> <CircularProgress /> </LoadingBox> : user ? <><CustomHeader>
             <HeaderContainer>
-                <Avatar />
+                <Avatar src={`${import.meta.env.VITE_BACKEND_URL}/images/profiles/${user.profile}`} />
                 <HeaderTitle variant='h6'>{ user && `${capitalize(user.name.firstName)} ${capitalize(user.name.secondName)}` }</HeaderTitle>
             </HeaderContainer>
             <HeaderContainer></HeaderContainer>

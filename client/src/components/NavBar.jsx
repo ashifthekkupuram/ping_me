@@ -142,7 +142,7 @@ const NavBar = () => {
             aria-expanded={menu ? 'true' : undefined}
             aria-haspopup="true"
             onClick={onSetMenu} >
-          <Avatar alt={`${UserData.name?.firstName} ${UserData.name?.secondName}`} src={UserData?.profile} />
+          <Avatar src={UserData.profile && `${import.meta.env.VITE_BACKEND_URL}/images/profiles/${UserData.profile}`} alt={`${UserData.name?.firstName} ${UserData.name?.secondName}`} />
           </IconButton>
           </Tooltip>
           <CustomMenu open={menu} id='account-menu' onClose={onCloseMenu} anchorOrigin={{ horizontal: 'right', vertical: 'top' }}>

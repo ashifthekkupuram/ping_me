@@ -26,6 +26,14 @@ const isAuthenticated = async (req, res, next) => {
 
         jwt.verify(token, process.env.ACCESS_SECRET_KEY, async (err, result) => {
             if(err){
+
+                if(err.name === 'TokenExpiredError'){
+                    return res.status(403).json({
+                        success: false,
+                        message: 'Token Expired'
+                    })
+                }
+
                 return res.status(400).json({
                     success: false,
                     message: 'Something went wrong',

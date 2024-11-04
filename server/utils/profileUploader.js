@@ -21,7 +21,6 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, done) => {
         if (file) {
-            console.log(file)
             const prefix = Date.now() + '-' + Math.round(Math.random() * 1e9)
             const fileTypes = /jpeg|jpg|png/
             const extname = fileTypes.test(

@@ -93,7 +93,6 @@ const NavBar = () => {
       const result = await dispatch(logout())
       console.log(result)
       toast.success(result.payload.message)
-    
   }
 
   const onToggle = () => {
@@ -114,14 +113,17 @@ const NavBar = () => {
 
   const onAddChat = () => {
     dispatch(setAddUser({ open: true }))
+    setMenu(false)
   }
 
   const onProfile = () => {
     navigate('/profile')
+    setMenu(false)
   }
 
   const onHome = () => {
     navigate('/')
+    setMenu(false)
   }
 
   return (

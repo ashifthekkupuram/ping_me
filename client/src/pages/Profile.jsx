@@ -7,6 +7,7 @@ import { toast } from 'react-hot-toast'
 
 import axios from '../api/axios'
 import { updateUserData } from '../redux/slices/authSlice'
+import { refresh } from '../redux/slices/authSlice'
 
 const MainBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -79,7 +80,12 @@ const Profile = () => {
       toast.success(response.data.message)
     } catch (err) {
       if (err.response) {
-        toast.error(err.response.data.message)
+        if(err.status === 403){
+          await dispatch(refresh())
+          onChange()
+        }else{
+          toast.error(err.response.data.message)
+        }
       } else {
         toast.error('Internal Server Error')
       }

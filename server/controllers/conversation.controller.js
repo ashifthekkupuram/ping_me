@@ -46,7 +46,10 @@ export const get_coversation = async (req, res, next) => {
             messages: conversation.messages,
             user: {
                 _id: user._id,
-                name: user.name
+                name: user.name,
+                profile: user.profile,
+                bio: user.bio,
+                username: user.username
             },
         })
 

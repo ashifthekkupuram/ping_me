@@ -71,6 +71,7 @@ const Profile = () => {
     try {
       const formData = new FormData()
       formData.append('profile', e.target.files[0])
+
       const response = await axios.post('/user/profile', formData, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -80,10 +81,18 @@ const Profile = () => {
       toast.success(response.data.message)
     } catch (err) {
       if (err.response) {
-        if(err.status === 403){
-          await dispatch(refresh())
-          onChange()
-        }else{
+        if (err.status === 403) {
+          await dispatch(refresh()).then((result) => {
+            if (result.payload.success) {
+              toast.error('Try again')
+            } else {
+              if (result.payload.message === 'Forbidden') {
+                toast.error('Session Expired')
+              }
+            }
+          })
+
+        } else {
           toast.error(err.response.data.message)
         }
       } else {

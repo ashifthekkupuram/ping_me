@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Box, Typography, TextField, Button, Avatar } from '@mui/material'
+import { Modal, Box, Typography, TextField, Button, Avatar, styled, capitalize } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-hot-toast'
 
@@ -21,9 +21,50 @@ const style = {
     p: 4,
 }
 
+const FormBox = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    // gap: '8px',
+    padding: '50px 25px',
+    backgroundColor:  theme.palette.primary.contrastText,
+    borderRadius: '10px',
+    boxShadow: theme.shadows[3],
+    width: '400px'
+}))
+
+const Title = styled(Typography)(({theme}) => ({
+    color: theme.palette.text.primary,
+    marginBottom: '8px',
+    alignSelf: 'center'
+}))
+
+const CustomButton = styled(Button)(({ theme }) => ({
+    marginTop: '10px',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+    '&.Mui-disabled': {
+    backgroundColor: theme.palette.action.disabledBackground,
+    color: theme.palette.action.disabled
+  },
+}))
+
+const ResultBox = styled(Box)(({ theme }) => ({
+    alignSelf: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    gap: '15px',
+    paddingLeft: '20px',
+    marginBottom: '10px'
+}))
+
 const UserAddModal = () => {
 
-    const [username, setUsername] = useState('')
+    const [username, setUsername] = useState()
     const [text, setText] = useState('')
 
     const { open, result } = useSelector((state) => state.addUser)
@@ -95,21 +136,24 @@ const UserAddModal = () => {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h5" component="h2">
-                    Add user
-                </Typography>
-                <Box>
+            <FormBox sx={style}>
+                <Title id="modal-modal-title" variant="h4">
+                    Add User
+                </Title>
+
                     {result ? <>
-                        {result.username}
+                        <ResultBox>
+                            <Avatar sx={{ width: 50, height: 50 }} src={`${import.meta.env.VITE_BACKEND_URL}/images/profiles/${result.profile}`} />
+                            <Typography variant='h6' >{capitalize(result.name.firstName)} {capitalize(result.name.secondName)}</Typography>
+                        </ResultBox>
                         <TextField type='text' value={text} placeholder='send message...' onChange={(e) => setText(e.target.value)} />
-                        <Button variant='contained' onClick={onMessage} >Send</Button>
+                        <CustomButton variant='contained' onClick={onMessage}>Send</CustomButton>
                     </> : <>
-                        <TextField sx={{ height: '30px' }} type='text' value={username} onChange={(e) => setUsername(e.target.value)} placeholder='username...' />
-                        <Button variant='contained' onClick={onFind} >Find</Button>
+                        <TextField type='text' value={username} onChange={(e) => setUsername(e.target.value)} label='Username' placeholder='username...' />
+                        <CustomButton variant='contained' onClick={onFind} >Find</CustomButton>
                         </>}
-                </Box>
-            </Box>
+                
+            </FormBox>
         </Modal>
     )
 }

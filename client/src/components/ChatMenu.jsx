@@ -44,7 +44,7 @@ const ChatMenu = () => {
   return (
     <CustomDrawer variant={isMobile ? 'temporary' : 'permanent'} open={chatMenu} >
       <Divider sx={{ marginTop: 8 }} >Chats</Divider>
-      { conversations.map((conv) => <ChatCard key={conv._id} conv={conv} />) }
+      { conversations && conversations.map((conv) => <ChatCard key={conv._id} conv={conv} />) }
     </CustomDrawer>
   )
 }

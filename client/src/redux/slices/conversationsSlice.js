@@ -38,7 +38,7 @@ const conversationsSlice = createSlice({
             return action.payload.users
         })
         .addCase(get_users.rejected, () => {
-            return []
+            return initialState
         })
     }
 })

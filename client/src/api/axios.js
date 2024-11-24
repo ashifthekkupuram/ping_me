@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { store } from '../redux/store'
+// import { store } from '../redux/store'
 
 const baseURL = import.meta.env.VITE_API_URL
 
@@ -11,10 +11,10 @@ const instance =  axios.create({
 // Befour API Call
 instance.interceptors.request.use(
     async (config) => {
-        const token = store.getState().auth.token || ''
-        if(token){
-            config.headers.Authorization = `Bearer ${token}`
-        }
+        // const token = store.getState().auth.token || ''
+        // if(token){
+        //     config.headers.Authorization = `Bearer ${token}`
+        // }
         return config
     },
     (error) => {

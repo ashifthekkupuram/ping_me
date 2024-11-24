@@ -32,6 +32,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use('/images', express.static(uploadsDir))
+app.set('view engine', 'ejs')
 
 //API routes
 app.use('/api/auth', AuthRouter)

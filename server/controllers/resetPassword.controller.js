@@ -1,5 +1,9 @@
 import dotenv from 'dotenv'
 import bcrypt from 'bcryptjs'
+import ejs from 'ejs'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 import ResetPassword from '../models/resetPassword..model.js'
 import User from '../models/user.model.js'
@@ -8,6 +12,8 @@ import transporter from '../utils/mail.js'
 dotenv.config()
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\S]{8,}$/
+
+const RESET_PARA = "Thank you for using [Your Platform Name]! Click the link below to reset your password."
 
 export const get_reset_password = async (req, res, next) => {
     try{
@@ -84,14 +90,20 @@ export const post_reset_password = async (req, res, next) => {
 
         await resetToken.save()
 
-        const url = process.env.ALLOWED_ORIGINS.split(' ')
+        const URL = process.env.ALLOWED_ORIGINS.split(' ')
+
+        const __filename = fileURLToPath(import.meta.url)
+            const __dirname = path.dirname(__filename)
+            const file = path.join(__dirname, '../templates/template.ejs')
+            const temp = fs.readFileSync(file, 'utf-8')
+            const template = ejs.render(temp, { URL: URL[0], token: resetToken.token, para: RESET_PARA.replace('[Your Platform Name]', `${user.name.firstName} ${user.name.secondName}`), doing: 'reset-password-confirm'})
 
         await transporter.sendMail({
             from: process.env.EMAIL,
             to: email.toLowerCase(),
             subject: 'Ping Me - Reset Password',
             text: 'reset password',
-            html: `<a href='${url[0]}/reset-password-confirm/${resetToken.token}'>Click here to reset<a/>`
+            html: template
         })
 
         return res.json({
@@ -100,6 +112,7 @@ export const post_reset_password = async (req, res, next) => {
         })
 
     } catch(err) {
+
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { setStore } from '../api/axios'
 
 import authReducer from './slices/authSlice'
 import darkModeReducer from './slices/darkModeSlice'
@@ -23,3 +24,5 @@ export const store = configureStore({
             serializableCheck: false
         })
 })
+
+setStore(store)

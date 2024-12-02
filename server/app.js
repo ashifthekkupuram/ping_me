@@ -10,6 +10,7 @@ import ConversationRouter from './routes/conversation.route.js'
 import UserRouter from './routes/user.route.js'
 import ResetPasswordRouter from './routes/resetPassword.route.js'
 import VerificationRouter from './routes/verification.route.js'
+import MessageRouter from './routes/message.router.js'
 
 import { CONNECT_DB } from './config/database.js'
 import corsOptions from './config/corsOptions.js'
@@ -40,6 +41,7 @@ app.use('/api/conversation', ConversationRouter)
 app.use('/api/user', UserRouter)
 app.use('/api/reset', ResetPasswordRouter)
 app.use('/api/verification', VerificationRouter)
+app.use('/api/message', MessageRouter)
 
 server.listen(PORT, async () => {
     await CONNECT_DB()

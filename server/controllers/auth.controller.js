@@ -187,9 +187,9 @@ export const register = async (req, res, next) => {
 
                 const __filename = fileURLToPath(import.meta.url)
             const __dirname = path.dirname(__filename)
-            const file = path.join(__dirname, '../templates/verification.ejs')
+            const file = path.join(__dirname, '../templates/template.ejs')
             const temp = fs.readFileSync(file, 'utf-8')
-            const template = ejs.render(temp, { URL: URL[0], token: verification.token, para: VERIFICATION_PARA.replace('[Your Platform Name]', `${user.name.firstName} ${user.name.secondName}`), })
+            const template = ejs.render(temp, { URL: URL[0], token: verification.token, para: VERIFICATION_PARA.replace('[Your Platform Name]', `${user.name.firstName} ${user.name.secondName}`), doing: 'Verification'})
 
                 await Promise.all([
                     await verification.save(),

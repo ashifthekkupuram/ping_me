@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Box, styled, FormGroup, TextField, Button, Avatar, Typography, Paper, CircularProgress, Alert, capitalize } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
+import MenuIcon from '@mui/icons-material/Menu';
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-hot-toast'
 
@@ -26,6 +27,7 @@ const CustomHeader = styled(Box)(({ theme }) => ({
 
 const HeaderContainer = styled(Box)(({ theme }) => ({
     display:'flex',
+    
     alignItems: 'center',
     gap: 5,
 }))
@@ -53,6 +55,10 @@ const LoadingBox = styled(Box)(({ theme }) => ({
     height: '100vh',
     width: '100%',
     backgroundColor: theme.palette.background.default
+}))
+
+const CustomMenuIcon = styled(MenuIcon)(({ theme }) => ({
+    color: theme.palette.text.primary
 }))
 
 const ChatSection = () => {
@@ -116,10 +122,12 @@ const ChatSection = () => {
                 <Avatar src={`${import.meta.env.VITE_BACKEND_URL}/images/profiles/${user.profile}`} />
                 <HeaderTitle variant='h6'>{ user && `${capitalize(user.name.firstName)} ${capitalize(user.name.secondName)}` }</HeaderTitle>
             </HeaderContainer>
-            <HeaderContainer></HeaderContainer>
+            <HeaderContainer>
+                <CustomMenuIcon  />
+            </HeaderContainer>
         </CustomHeader>
         <MessageBody elevation={0} ref={MessageBodyRef}>
-            {conversation.map((message) => UserData._id == message.sender ? <MessageRight key={message._id} message={message} /> : <MessageLeft key={message._id} message={message} />)}
+            {conversation.map((message) => UserData._id == message.sender ? ( !message.delete_from.includes(UserData._id) && <MessageRight key={message._id} message={message} />) : (!message.delete_from.includes(UserData._id) && <MessageLeft key={message._id} message={message} />))}
         </MessageBody>
         <Box row sx={{display: 'flex',width: '100%'}}>
             <TextField value={text} placeholder='Typing anything...' sx={{flex: 3}} onChange={onTextChange} />

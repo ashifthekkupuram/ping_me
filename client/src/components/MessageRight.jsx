@@ -20,9 +20,9 @@ const Message = styled(Typography)(({ theme }) => ({
     textAlign: 'right',
 }))
 
-const MessageRight = ({ message }) => {
+const MessageRight = ({ message, selectedItems, onSelect, selection }) => {
   return (
-    <MessageBox>
+    <MessageBox sx={{ backgroundColor: selectedItems.includes(message._id) && 'blue' }} onClick={() => selection && onSelect(message._id)}>
       <Message>{message.message}</Message>
     </MessageBox>
   )

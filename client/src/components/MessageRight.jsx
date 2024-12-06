@@ -12,7 +12,7 @@ const MessageBox = styled(Box)(({ theme }) => ({
     width: 'fit-content',
     minWidth: '1rem',
     wordBreak: 'break-word',
-    borderTopRightRadius: 0
+    borderTopRightRadius: 0,
 }))
 
 const Message = styled(Typography)(({ theme }) => ({
@@ -21,8 +21,11 @@ const Message = styled(Typography)(({ theme }) => ({
 }))
 
 const MessageRight = ({ message, selectedItems, onSelect, selection }) => {
+
+  const checkSelection = selectedItems.includes(message._id)
+
   return (
-    <MessageBox sx={{ backgroundColor: selectedItems.includes(message._id) && 'blue' }} onClick={() => selection && onSelect(message._id)}>
+    <MessageBox sx={{ backgroundColor: checkSelection && 'blue', padding: checkSelection ? '12px' : '8px' }} onClick={() => selection && onSelect(message._id)}>
       <Message>{message.message}</Message>
     </MessageBox>
   )

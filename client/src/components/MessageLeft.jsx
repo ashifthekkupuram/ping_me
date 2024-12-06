@@ -5,7 +5,7 @@ const MessageBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'start',
   alignItems: 'center',
-  padding: 8,
+  // padding: 8,
   backgroundColor: theme.palette.secondary.main,
   borderRadius: 6,
   width: 'fit-content',
@@ -20,8 +20,10 @@ const Message = styled(Typography)(({ theme }) => ({
 
 const MessageLeft = ({ message, selectedItems, onSelect, selection }) => {
 
+  const checkSelection = selectedItems.includes(message._id)
+
   return (
-    <MessageBox sx={{ backgroundColor: selectedItems.includes(message._id) && 'blue' }} onClick={() => selection && onSelect(message._id)}>
+    <MessageBox sx={{ backgroundColor: checkSelection && 'blue', padding: checkSelection ? '12px' : '8px' }} onClick={() => selection && onSelect(message._id)}>
       <Message >{ message.deleted ? '(Message is deleted)' : message.message}</Message>
     </MessageBox>
   )

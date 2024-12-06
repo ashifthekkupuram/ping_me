@@ -7,7 +7,7 @@ import isConversation from '../middlewares/isConversation.js'
 
 const Router =  express.Router()
 
-Router.delete('/delete', isAuthenticated, isMessager, delete_message)
-Router.delete('/delete_from', isAuthenticated, isConversation, delete_message_from_me)
+Router.post('/delete', isAuthenticated, isMessager, delete_message)
+Router.post('/delete_from', isAuthenticated, isConversation, delete_message_from_me)
 
 export default Router

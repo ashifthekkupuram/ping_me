@@ -7,6 +7,7 @@ import { toast } from 'react-hot-toast'
 
 import MessageLeft from './MessageLeft'
 import MessageRight from './MessageRight'
+import DeleteMessageModal from './DeleteMessageModal'
 
 import axios from '../api/axios'
 import { sendMessage } from '../redux/slices/conversationSlice'
@@ -75,6 +76,7 @@ const ChatSection = () => {
     const [menu, setMenu] = useState(false)
     const [selection, setSelection] = useState(false)
     const [selectedItems, setSelectedItems] = useState([])
+    const [deleteModal, setDeleteModal] = useState(false)
 
     const { user, conversation, error, loading } = useSelector((state) => state.conversation)
     const token = useSelector((state) => state.auth.token)
@@ -110,6 +112,14 @@ const ChatSection = () => {
             setSelectedItems( prev => prev.filter((i) => i !== item) )
         }else{
             setSelectedItems(prev => [...prev, item])
+        }
+    }
+
+    const onDelete = () => {
+        if(selectedItems.length > 0){
+            setDeleteModal(true)
+        }else{
+            toast.error('Need to atleast one message')
         }
     }
 
@@ -181,7 +191,7 @@ const ChatSection = () => {
                         }}
                     >
                         <MenuItem onClick={onSelection}>{ selection ? 'Unselect' : 'Select' }</MenuItem>
-                        {selection && <MenuItem>Delete</MenuItem>}
+                        {selection && <MenuItem onClick={onDelete}>Delete</MenuItem>}
                     </Menu>
                 </HeaderContainer>
             </CustomHeader>
@@ -192,6 +202,7 @@ const ChatSection = () => {
                     <TextField value={text} placeholder='Typing anything...' sx={{ flex: 3 }} onChange={onTextChange} />
                     <Button disabled={!text || textLoading} variant='contained' onClick={onSubmit}><SendIcon /></Button>
                 </Box> </> : <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox>}
+                <DeleteMessageModal deleteModal={deleteModal} setDeleteModal={setDeleteModal} selectedItems={selectedItems} onSelection={onSelection} />
         </ContainerBox>
     )
 }

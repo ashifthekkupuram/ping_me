@@ -26,7 +26,7 @@ const MessageRight = ({ message, selectedItems, onSelect, selection }) => {
 
   return (
     <MessageBox sx={{ backgroundColor: checkSelection && 'blue', padding: checkSelection ? '12px' : '8px' }} onClick={() => selection && onSelect(message._id)}>
-      <Message>{message.message}</Message>
+      <Message>{ message.deleted ? '(Message is deleted)' : message.message}</Message>
     </MessageBox>
   )
 }

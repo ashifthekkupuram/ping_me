@@ -39,6 +39,10 @@ const conversationSlice = createSlice({
         deleteMessageFromMe: (state, action) => {
             const idsToRemove = new Set(action.payload)
             state.conversation = state.conversation.filter((i) => !idsToRemove.has(i._id))
+        },
+        deleteMessageFromEveryone: (state, action) => {
+            const idsToDelete = new Set(action.payload)
+            state.conversation = state.conversation.map((i) => idsToDelete.has(i._id) ? {...i, deleted: true} : i)
         }
     },
     extraReducers: (builder) => {
@@ -63,6 +67,6 @@ const conversationSlice = createSlice({
     }
 })
 
-export const { sendMessage, deleteMessageFromMe } = conversationSlice.actions
+export const { sendMessage, deleteMessageFromMe, deleteMessageFromEveryone } = conversationSlice.actions
 
 export default conversationSlice.reducer

@@ -58,7 +58,7 @@ const Profile = () => {
 
   const [loading, setLoading] = useState(false)
 
-  const { name, username, profile } = useSelector((state) => state.auth.UserData)
+  const UserData = useSelector((state) => state.auth.UserData)
   const token = useSelector((state) => state.auth.token)
 
   const ImageField = useRef(null)
@@ -131,13 +131,13 @@ const Profile = () => {
       <ContainerBox>
         <Divider sx={{ alignSelf: 'center' }} >
           <IconButton onClick={() => ImageField.current.click()}>
-            {loading ? <CircularProgress size={25} /> : <Avatar src={profile && `${import.meta.env.VITE_BACKEND_URL}/images/profiles/${profile}`} sx={{ width: 68, height: 68, }} />}
+            {loading ? <CircularProgress size={25} /> : <Avatar src={UserData.profile && `${import.meta.env.VITE_BACKEND_URL}/images/profiles/${UserData.profile}`} sx={{ width: 68, height: 68, }} />}
           </IconButton>
           <input ref={ImageField} value={null} style={{ display: 'none' }} type="file" onChange={onChange} />
         </Divider>
-        {profile && <Divider sx={{ alignSelf: 'center' }} > <Button variant='contained' color='error' onClick={onRemove} >Remove Profile</Button></Divider>}
-        <Divider> <Name variant='h1'>{capitalize(name?.firstName)} {capitalize(name?.secondName)}</Name> <CustomButton variant='contained' onClick={() => navigate('/name')} > <EditIcon /> </CustomButton> </Divider>
-        <Divider> <Username variant='h6'>@{username}</Username> <CustomButton variant='contained' onClick={() => navigate('/username')} > <EditIcon /> </CustomButton> </Divider>
+        {UserData.profile && <Divider sx={{ alignSelf: 'center' }} > <Button variant='contained' color='error' onClick={onRemove} >Remove Profile</Button></Divider>}
+        <Divider> <Name variant='h1'>{capitalize(UserData.name?.firstName)} {capitalize(UserData.name?.secondName)}</Name> <CustomButton variant='contained' onClick={() => navigate('/name')} > <EditIcon /> </CustomButton> </Divider>
+        <Divider> <Username variant='h6'>@{UserData.username}</Username> <CustomButton variant='contained' onClick={() => navigate('/username')} > <EditIcon /> </CustomButton> </Divider>
         <Divider sx={{ alignSelf: 'center' }} > <Button variant='contained' onClick={() => navigate('/change-password')} >Change Password</Button></Divider>
       </ContainerBox>
     </MainBox>

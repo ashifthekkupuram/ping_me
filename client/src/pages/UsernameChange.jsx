@@ -99,10 +99,10 @@ const UsernameChange = () => {
 
     return (
         <MainBox>
-            <FormBox>
+            <FormBox component='form' onSubmit={onSubmit}>
                 <Title variant='h4'>Username Change</Title>
                 <TextField type='text' value={username} variant='outlined' name='username' id='username' label='Username' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
-                <ChangeButton disabled={disabled} onClick={onSubmit} >{loading ? <CircularProgress size={24} /> : 'Change'}</ChangeButton>
+                <ChangeButton type='submit' disabled={disabled} >{loading ? <CircularProgress size={24} /> : 'Change'}</ChangeButton>
             </FormBox>
         </MainBox>
     )

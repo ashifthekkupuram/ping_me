@@ -93,12 +93,12 @@ const PasswordChange = () => {
 
     return (
         <MainBox>
-            <FormBox>
+            <FormBox component='form' onSubmit={onSubmit}>
                 <Title variant='h4'>Password Change</Title>
                 <TextField type='password' value={password.oldPassword} variant='outlined' name='oldPassword' id='oldPassword' label='Old Password' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
                 <TextField type='password' value={password.newPassword} variant='outlined' name='newPassword' id='newPassword' label='New Password' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
                 <TextField type='password' value={password.confirmNewPassword} variant='outlined' name='confirmNewPassword' id='confirmNewPassword' label='Confirm New Password' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
-                <ChangeButton disabled={disabled} onClick={onSubmit} >{loading ? <CircularProgress size={24} /> : 'Change'}</ChangeButton>
+                <ChangeButton type='submit' disabled={disabled} >{loading ? <CircularProgress size={24} /> : 'Change'}</ChangeButton>
             </FormBox>
         </MainBox>
     )

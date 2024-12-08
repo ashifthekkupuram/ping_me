@@ -105,11 +105,11 @@ const NameChange = () => {
 
     return (
         <MainBox>
-            <FormBox>
+            <FormBox component='form' onSubmit={onSubmit}>
                 <Title variant='h4'>Name Change</Title>
                 <TextField type='text' value={name.firstName} variant='outlined' name='firstName' id='firstName' label='First Name' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
                 <TextField type='text' value={name.secondName} variant='outlined' name='secondName' id='secondName' label='Second Name' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
-                <ChangeButton disabled={disabled} onClick={onSubmit} >{loading ? <CircularProgress size={24} /> : 'Change'}</ChangeButton>
+                <ChangeButton type='submit' disabled={disabled} >{loading ? <CircularProgress size={24} /> : 'Change'}</ChangeButton>
             </FormBox>
         </MainBox>
     )

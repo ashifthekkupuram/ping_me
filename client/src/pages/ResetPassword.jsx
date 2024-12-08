@@ -91,11 +91,11 @@ const ResetPassword = () => {
 
     return (
         <MainBox>
-            <FormBox>
+            <FormBox component='form' onSubmit={onSubmit}>
                 <CustomChatBubleIcon />
                 <Title variant='h4'>Reset Password</Title>
                 <TextField type='email' value={email} variant='outlined' name='email' id='email' label='Email' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
-                <ResetButton disabled={loading || !email} onClick={onSubmit} >{loading ? <CircularProgress size={24} /> : 'Reset'}</ResetButton>
+                <ResetButton type='submit' disabled={loading || !email} >{loading ? <CircularProgress size={24} /> : 'Reset'}</ResetButton>
                 <CustomLink variant='small' onClick={(e) => navigate('/login')}>Go to Login?</CustomLink>
             </FormBox>
         </MainBox>

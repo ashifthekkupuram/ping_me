@@ -130,7 +130,7 @@ const ResetConfirmPassword = () => {
 
     return (
         <MainBox>
-            <FormBox>
+            <FormBox component='form' onSubmit={onSubmit}>
                 {resultLoading ? <CircularProgress size={40} /> : (result ?
                     <>
                         { result && result.success ? <CustomBeenhereIcon/> : <CustomDangerousIcon /> }
@@ -142,7 +142,7 @@ const ResetConfirmPassword = () => {
                         <Title variant='h4'>Confirm Reset Password</Title>
                         <TextField type='password' value={password.password} variant='outlined' name='password' id='password' label='Password' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
                         <TextField type='password' value={password.confirmPassword} variant='outlined' name='confirmPassword' id='confirmPassword' label='Confirm Password' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
-                        <ResetButton disabled={loading || !password.password || !password.confirmPassword || !(password.password === password.confirmPassword)} onClick={onSubmit} >{loading ? <CircularProgress size={24} /> : 'Reset Password'}</ResetButton>
+                        <ResetButton type='submit' disabled={loading || !password.password || !password.confirmPassword || !(password.password === password.confirmPassword)} >{loading ? <CircularProgress size={24} /> : 'Reset Password'}</ResetButton>
                         <CustomLink variant='small' onClick={(e) => navigate('/login')}>Go to Login?</CustomLink>
                     </>
                 )}

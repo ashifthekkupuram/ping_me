@@ -8,9 +8,12 @@ import { toast } from 'react-hot-toast'
 import MessageLeft from './MessageLeft'
 import MessageRight from './MessageRight'
 import DeleteMessageModal from './DeleteMessageModal'
+import useChatScroll from '../hooks/useChatScroll'
 
 import axios from '../api/axios'
 import { sendMessage } from '../redux/slices/conversationSlice'
+
+import newMessageSound from '../assets/sounds/new_message.mp3'
 
 const ContainerBox = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -84,7 +87,8 @@ const ChatSection = () => {
     const socket = useSelector((state) => state.online.socket)
 
     const dispatch = useDispatch()
-    const MessageBodyRef = useRef(null)
+
+    const ref = useChatScroll(conversation)
 
     const onTextChange = (e) => {
         setText(e.target.value)
@@ -123,9 +127,10 @@ const ChatSection = () => {
         }
     }
 
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
         setTextLoading(true)
         try {
+            e.preventDefault()
             const response = await axios.post(`/conversation/${user._id}`, { message: text.trim() }, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -133,7 +138,6 @@ const ChatSection = () => {
             })
             dispatch(sendMessage(response.data.newMessage))
             setText('')
-            scrollToBottom()
         } catch (err) {
             if (err.response) {
                 toast.error(err.response.data.message)
@@ -145,15 +149,11 @@ const ChatSection = () => {
         }
     }
 
-    const scrollToBottom = () => {
-        if (MessageBodyRef.current) {
-            MessageBodyRef.current.scrollTop = MessageBodyRef.current.scrollHeight
-        }
-    }
-
     useEffect(() => {
         socket?.on('sendMessage', (newMessage) => {
             newMessage.shouldShake = true
+            const sound = new Audio(newMessageSound)
+            sound.play()
             dispatch(sendMessage(newMessage))
         })
 
@@ -195,13 +195,13 @@ const ChatSection = () => {
                     </Menu>
                 </HeaderContainer>
             </CustomHeader>
-                <MessageBody elevation={0} ref={MessageBodyRef}>
+                <MessageBody elevation={0} ref={ref}>
                     {conversation.map((message) => UserData._id == message.sender ? (!message.delete_from.includes(UserData._id) && <MessageRight key={message._id} selectedItems={selectedItems} message={message} onClick={ () => onSelect(message._id)} onSelect={onSelect} selection={selection} />) : (!message.delete_from.includes(UserData._id) && <MessageLeft key={message._id} selectedItems={selectedItems} message={message} onSelect={onSelect} selection={selection} />))}
                 </MessageBody>
-                <Box row sx={{ display: 'flex', width: '100%' }}>
+                <form style={{ display: 'flex', width: '100%' }} onSubmit={onSubmit}>
                     <TextField value={text} placeholder='Typing anything...' sx={{ flex: 3 }} onChange={onTextChange} />
-                    <Button disabled={!text || textLoading} variant='contained' onClick={onSubmit}><SendIcon /></Button>
-                </Box> </> : <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox>}
+                    <Button disabled={!text || textLoading} variant='contained'><SendIcon /></Button>
+                </form> </> : <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox>}
                 <DeleteMessageModal deleteModal={deleteModal} setDeleteModal={setDeleteModal} selectedItems={selectedItems} onSelection={onSelection} />
         </ContainerBox>
     )

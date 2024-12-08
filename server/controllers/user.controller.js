@@ -120,7 +120,8 @@ export const update_name = async (req, res, next) => {
                 email: updatedUser.email,
                 username: updatedUser.username,
                 name: updatedUser.name,
-                bio: updatedUser.bio
+                bio: updatedUser.bio,
+                profile: updatedUser.profile
             }
         })
 
@@ -180,7 +181,8 @@ export const update_username = async (req, res, next) => {
                 email: updatedUser.email,
                 username: updatedUser.username,
                 name: updatedUser.name,
-                bio: updatedUser.bio
+                bio: updatedUser.bio,
+                profile: updatedUser.profile
             }
         })
 

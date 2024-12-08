@@ -23,7 +23,7 @@ const MessageLeft = ({ message, selectedItems, onSelect, selection }) => {
   const checkSelection = selectedItems.includes(message._id)
 
   return (
-    <MessageBox sx={{ backgroundColor: checkSelection && 'blue', padding: checkSelection ? '12px' : '8px' }} onClick={() => selection && onSelect(message._id)}>
+    <MessageBox sx={{ backgroundColor: checkSelection ? 'blue' : message.deleted && 'grey', padding: checkSelection ? '12px' : '8px' }} onClick={() => selection && onSelect(message._id)}>
       <Message >{ message.deleted ? '(Message is deleted)' : message.message}</Message>
     </MessageBox>
   )

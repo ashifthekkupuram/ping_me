@@ -206,7 +206,7 @@ const ChatSection = () => {
                 </MessageBody>
                 <Box style={{ display: 'flex', width: '100%' }} component='form' onSubmit={onSubmit}>
                     <TextField value={text} placeholder='Typing anything...' sx={{ flex: 3 }} onChange={onTextChange} />
-                    <Button type='submit' disabled={!text || textLoading} variant='contained'><SendIcon /></Button>
+                    <Button type='submit' disabled={!text || textLoading} variant='contained'>{textLoading ? <CircularProgress size={25} /> :<SendIcon />}</Button>
                 </Box> </> : <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox>}
             <DeleteMessageModal deleteModal={deleteModal} setDeleteModal={setDeleteModal} selectedItems={selectedItems} onSelection={onSelection} />
         </ContainerBox>

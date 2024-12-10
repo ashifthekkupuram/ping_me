@@ -57,7 +57,6 @@ const UsernameChange = () => {
     const [error, setError] = useState(null)
 
     const { username: UserDataUsername } = useSelector((state) => state.auth.UserData)
-    const token = useSelector((state) => state.auth.token)
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -70,13 +69,7 @@ const UsernameChange = () => {
         setError(null)
         setLoading(true)
         try {
-            const response = await axios.put('/user/username', {
-                username: username.trim()
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const response = await axios.put('/user/username', { username: username.trim()} ,)
             dispatch(updateUserData(response.data.updatedUser))
             navigate('/profile')
             toast.success(response.data.message)

@@ -59,7 +59,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(false)
 
   const UserData = useSelector((state) => state.auth.UserData)
-  const token = useSelector((state) => state.auth.token)
 
   const ImageField = useRef(null)
 
@@ -72,11 +71,7 @@ const Profile = () => {
       const formData = new FormData()
       formData.append('profile', e.target.files[0])
 
-      const response = await axios.post('/user/profile', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      const response = await axios.post('/user/profile', formData,)
       dispatch(updateUserData(response.data.updatedUser))
       toast.success(response.data.message)
     } catch (err) {
@@ -108,11 +103,7 @@ const Profile = () => {
 
   const onRemove = async () => {
     try {
-      const response = await axios.delete('/user/profile', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      const response = await axios.delete('/user/profile',)
       dispatch(updateUserData(response.data.updatedUser))
       toast.success(response.data.message)
     } catch (err) {
@@ -133,7 +124,7 @@ const Profile = () => {
           <IconButton onClick={() => ImageField.current.click()}>
             {loading ? <CircularProgress size={25} /> : <Avatar src={UserData.profile && `${import.meta.env.VITE_BACKEND_URL}/images/profiles/${UserData.profile}`} sx={{ width: 68, height: 68, }} />}
           </IconButton>
-          <input ref={ImageField} value={null} style={{ display: 'none' }} type="file" onChange={onChange} />
+          <input ref={ImageField} value={''} style={{ display: 'none' }} type="file" onChange={onChange} />
         </Divider>
         {UserData.profile && <Divider sx={{ alignSelf: 'center' }} > <Button variant='contained' color='error' onClick={onRemove} >Remove Profile</Button></Divider>}
         <Divider> <Name variant='h1'>{capitalize(UserData.name?.firstName)} {capitalize(UserData.name?.secondName)}</Name> <CustomButton variant='contained' onClick={() => navigate('/name')} > <EditIcon /> </CustomButton> </Divider>

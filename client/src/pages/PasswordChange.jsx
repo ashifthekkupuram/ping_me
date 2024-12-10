@@ -59,8 +59,6 @@ const PasswordChange = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
-    const token = useSelector((state) => state.auth.token)
-
     const navigate = useNavigate()
 
     const onChange = (e) => {
@@ -71,11 +69,7 @@ const PasswordChange = () => {
         setError(null)
         setLoading(true)
         try {
-            const response = await axios.put('/user/change-password', { oldPassword: password.oldPassword, newPassword: password.confirmNewPassword }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const response = await axios.put('/user/change-password', { oldPassword: password.oldPassword, newPassword: password.confirmNewPassword },)
             navigate('/profile')
             toast.success(response.data.message)
         } catch (err) {

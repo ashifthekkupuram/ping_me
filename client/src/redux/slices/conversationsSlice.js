@@ -8,7 +8,7 @@ export const get_users = createAsyncThunk(
     'conversations/get_user',
     async ( credentials, { rejectWithValue } ) => {
         try {
-            const response = await axios.get('/user', {headers: { Authorization: `Bearer ${credentials.token}` }}, )
+            const response = await axios.get('/user'  )
             return response.data
         } catch (err) {
             if(err.response){

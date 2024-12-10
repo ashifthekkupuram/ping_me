@@ -3,6 +3,7 @@ import { ListItem, Avatar, ListItemButton, ListItemAvatar, ListItemText, Badge, 
 import { useSelector, useDispatch } from 'react-redux'
 
 import { get_conversation } from '../redux/slices/conversationSlice'
+import { toggleMenu } from '../redux/slices/chatMenu'
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -38,13 +39,12 @@ const ChatCard = ({ conv }) => {
 
     const onlineUsers = useSelector((state) => state.online.users)
     const isOnline = onlineUsers.includes(conv._id)
-
-    const token = useSelector((state) => state.auth.token)
+    
     const dispatch = useDispatch()
 
     const onSubmit = async () => {
-      console.log('Clicled')
-      dispatch(get_conversation({ userId: conv._id, token, }))
+      dispatch(get_conversation({ userId: conv._id }))
+      dispatch(toggleMenu())
     }
 
     return (

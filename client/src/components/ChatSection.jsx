@@ -48,8 +48,19 @@ const MessageBody = styled(Paper)(({ theme }) => ({
     gap: 5,
     padding: 10,
     height: 'calc(100vh - 140px)',
-
     overflowY: 'auto',
+    '::-webkit-scrollbar': {
+        width: 8
+    },
+    '::-webkit-scrollbar-track': {
+        background: theme.palette.primary.contrastText
+    },
+    '::-webkit-scrollbar-thumb': {
+        background: theme.palette.grey[400],
+        "&:hover": {
+            backgroundColor: theme.palette.grey[500],
+        }
+    },
 }))
 
 const LoadingBox = styled(Box)(({ theme }) => ({
@@ -82,7 +93,6 @@ const ChatSection = () => {
     const [deleteModal, setDeleteModal] = useState(false)
 
     const { user, conversation, error, loading } = useSelector((state) => state.conversation)
-    const token = useSelector((state) => state.auth.token)
     const UserData = useSelector((state) => state.auth.UserData)
     const socket = useSelector((state) => state.online.socket)
 
@@ -103,26 +113,26 @@ const ChatSection = () => {
     }
 
     const onSelection = () => {
-        if(selection){
+        if (selection) {
             setSelectedItems([])
             setSelection(false)
-        }else{
+        } else {
             setSelection(true)
         }
     }
 
     const onSelect = (item) => {
-        if(selectedItems.includes(item)){
-            setSelectedItems( prev => prev.filter((i) => i !== item) )
-        }else{
+        if (selectedItems.includes(item)) {
+            setSelectedItems(prev => prev.filter((i) => i !== item))
+        } else {
             setSelectedItems(prev => [...prev, item])
         }
     }
 
     const onDelete = () => {
-        if(selectedItems.length > 0){
+        if (selectedItems.length > 0) {
             setDeleteModal(true)
-        }else{
+        } else {
             toast.error('Need to atleast one message')
         }
     }
@@ -131,11 +141,7 @@ const ChatSection = () => {
         setTextLoading(true)
         try {
             e.preventDefault()
-            const response = await axios.post(`/conversation/${user._id}`, { message: text.trim() }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const response = await axios.post(`/conversation/${user._id}`, { message: text.trim() },)
             dispatch(sendMessage(response.data.newMessage))
             setText('')
         } catch (err) {
@@ -172,7 +178,7 @@ const ChatSection = () => {
                     <HeaderTitle variant='h6'>{user && `${capitalize(user.name.firstName)} ${capitalize(user.name.secondName)}`}</HeaderTitle>
                 </HeaderContainer>
                 <HeaderContainer>
-                    { selection && <SelectionBox>Selected { selectedItems.length }</SelectionBox>}
+                    {selection && <SelectionBox>Selected {selectedItems.length}</SelectionBox>}
                     <IconButton onClick={menuClick}>
                         <CustomMenuIcon />
                     </IconButton>
@@ -190,19 +196,19 @@ const ChatSection = () => {
                             horizontal: 'right',
                         }}
                     >
-                        <MenuItem onClick={onSelection}>{ selection ? 'Unselect' : 'Select' }</MenuItem>
+                        <MenuItem onClick={onSelection}>{selection ? 'Unselect' : 'Select'}</MenuItem>
                         {selection && <MenuItem onClick={onDelete}>Delete</MenuItem>}
                     </Menu>
                 </HeaderContainer>
             </CustomHeader>
                 <MessageBody elevation={0} ref={ref}>
-                    {conversation.map((message) => UserData._id == message.sender ? (!message.delete_from.includes(UserData._id) && <MessageRight key={message._id} selectedItems={selectedItems} message={message} onClick={ () => onSelect(message._id)} onSelect={onSelect} selection={selection} />) : (!message.delete_from.includes(UserData._id) && <MessageLeft key={message._id} selectedItems={selectedItems} message={message} onSelect={onSelect} selection={selection} />))}
+                    {conversation.map((message) => UserData._id == message.sender ? (!message.delete_from.includes(UserData._id) && <MessageRight key={message._id} selectedItems={selectedItems} message={message} onClick={() => onSelect(message._id)} onSelect={onSelect} selection={selection} />) : (!message.delete_from.includes(UserData._id) && <MessageLeft key={message._id} selectedItems={selectedItems} message={message} onSelect={onSelect} selection={selection} />))}
                 </MessageBody>
-                <form style={{ display: 'flex', width: '100%' }} onSubmit={onSubmit}>
+                <Box style={{ display: 'flex', width: '100%' }} component='form' onSubmit={onSubmit}>
                     <TextField value={text} placeholder='Typing anything...' sx={{ flex: 3 }} onChange={onTextChange} />
-                    <Button disabled={!text || textLoading} variant='contained'><SendIcon /></Button>
-                </form> </> : <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox>}
-                <DeleteMessageModal deleteModal={deleteModal} setDeleteModal={setDeleteModal} selectedItems={selectedItems} onSelection={onSelection} />
+                    <Button type='submit' disabled={!text || textLoading} variant='contained'><SendIcon /></Button>
+                </Box> </> : <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox>}
+            <DeleteMessageModal deleteModal={deleteModal} setDeleteModal={setDeleteModal} selectedItems={selectedItems} onSelection={onSelection} />
         </ContainerBox>
     )
 }

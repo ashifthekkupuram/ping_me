@@ -60,7 +60,6 @@ const NameChange = () => {
     const [error, setError] = useState(null)
 
     const { name: UserDataName } = useSelector((state) => state.auth.UserData)
-    const token = useSelector((state) => state.auth.token)
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -78,11 +77,7 @@ const NameChange = () => {
                     firstName: name.firstName.trim(),
                     secondName: name.secondName.trim()
                 }
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            },)
             dispatch(updateUserData(response.data.updatedUser))
             navigate('/profile')
             toast.success(response.data.message)

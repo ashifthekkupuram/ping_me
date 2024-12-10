@@ -78,6 +78,7 @@ const Register = () => {
   }
 
   const onSubmit = async (e) => {
+    e.preventDefault()
     setLoading(true)
     setError(null)
     try{
@@ -105,10 +106,10 @@ const Register = () => {
       <FormBox component='form' onSubmit={onSubmit}>
         <CustomChatBubleIcon />
         <Title variant='h4'>Register</Title>
-        <TextField type='text' value={form.firstName} variant='outlined' name='firstName' id='firstName' label='First Name' onChange={onChange} error={error} helperText={error} required fullWidth />
-        <TextField type='text' value={form.secondName} variant='outlined' name='secondName' id='secondName' label='Second Name' onChange={onChange} error={error} helperText={error} required fullWidth />
-        <TextField type='email' value={form.email} variant='outlined' name='email' id='email' label='Email' onChange={onChange} error={error} helperText={error} required fullWidth />
-        <TextField type='password' value={form.password} variant='outlined' name='password' id='password' label='Password' onChange={onChange} error={error} helperText={error} required fullWidth />
+        <TextField type='text' value={form.firstName} variant='outlined' name='firstName' id='firstName' label='First Name' onChange={onChange} error={error ? true : false} required fullWidth />
+        <TextField type='text' value={form.secondName} variant='outlined' name='secondName' id='secondName' label='Second Name' onChange={onChange} error={error ? true : false} required fullWidth />
+        <TextField type='email' value={form.email} variant='outlined' name='email' id='email' label='Email' onChange={onChange} error={error ? true : false} required fullWidth />
+        <TextField type='password' value={form.password} variant='outlined' name='password' id='password' label='Password' onChange={onChange} error={error ? true : false} helperText={error} required fullWidth />
         <RegisterButton type='submit' disabled={loading || !form.email || !form.password || !form.firstName || !form.secondName} >{ loading ? <CircularProgress size={24} /> : 'Login'}</RegisterButton>
         <CustomLink variant='small' onClick={(e)=>navigate('/login')}>Already have an account?</CustomLink>
       </FormBox> 

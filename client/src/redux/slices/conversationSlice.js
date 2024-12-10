@@ -13,7 +13,7 @@ export const get_conversation = createAsyncThunk(
     'conversation/get_conversation',
     async ( credentials, { rejectWithValue } ) => {
         try {
-            const response = await axios.get(`/conversation/${credentials.userId}/`, { headers: { authorization: `Bearer ${credentials.token}` } })
+            const response = await axios.get(`/conversation/${credentials.userId}/` )
             return response.data
         } catch (err) {
             if(err.response){
@@ -52,7 +52,6 @@ const conversationSlice = createSlice({
             state.error = null
         })
         .addCase(get_conversation.fulfilled, (state, action) => {
-            console.log(action.payload.messages)
             state.user = action.payload.user
             state.conversation = action.payload.messages
             state.error = null

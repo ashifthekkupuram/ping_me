@@ -149,7 +149,6 @@ const NavBar = () => {
           </Tooltip>
           <CustomMenu open={menu} id='account-menu' onClose={onCloseMenu} anchorOrigin={{ horizontal: 'right', vertical: 'top' }}>
             <MenuItem onClick={onHome}>Home</MenuItem>
-            <MenuItem onClick={onAddChat}>Add Chat</MenuItem>
             <MenuItem onClick={onProfile}>Profile</MenuItem>
             <MenuItem onClick={onLogout}>Logout</MenuItem>
           </CustomMenu>

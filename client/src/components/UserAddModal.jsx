@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Box, Typography, TextField, Button, Avatar, styled, capitalize } from '@mui/material'
+import { Modal, Box, Typography, TextField, Button, Avatar, styled, capitalize, CircularProgress } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-hot-toast'
 
@@ -66,6 +66,7 @@ const UserAddModal = () => {
 
     const [username, setUsername] = useState()
     const [text, setText] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const { open, result } = useSelector((state) => state.addUser)
     const token = useSelector((state) => state.auth.token)
@@ -80,7 +81,9 @@ const UserAddModal = () => {
         setText('')
     }
 
-    const onFind = async () => {
+    const onFind = async (e) => {
+        e.preventDefault()
+        setLoading(true)
         try{
             const response = await axios.get(`/user/${username}`, {headers: {
                 Authorization: `Bearer ${token}`
@@ -92,10 +95,14 @@ const UserAddModal = () => {
             }else{
                 toast.error('Internal Server Error')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
     const onMessage = async () => {
+        e.preventDefault()
+        setLoading(true)
         try{
             const response = await axios.post(`/conversation/${result._id}`, { message: text.trim() }, {
                 headers: {
@@ -115,6 +122,8 @@ const UserAddModal = () => {
             }else{
                 toast.error('Internal Server Error')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -136,7 +145,7 @@ const UserAddModal = () => {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
-            <FormBox sx={style}>
+            <FormBox sx={style} component='form' onSubmit={result ? onMessage : onFind}>
                 <Title id="modal-modal-title" variant="h4">
                     Add User
                 </Title>
@@ -147,10 +156,10 @@ const UserAddModal = () => {
                             <Typography variant='h6' >{capitalize(result.name.firstName)} {capitalize(result.name.secondName)}</Typography>
                         </ResultBox>
                         <TextField type='text' value={text} placeholder='send message...' onChange={(e) => setText(e.target.value)} />
-                        <CustomButton variant='contained' onClick={onMessage}>Send</CustomButton>
+                        <CustomButton type='submit' disabled={loading || !text} variant='contained'>{loading ? <CircularProgress size={22} /> : 'Send'}</CustomButton>
                     </> : <>
                         <TextField type='text' value={username} onChange={(e) => setUsername(e.target.value)} label='Username' placeholder='username...' />
-                        <CustomButton variant='contained' onClick={onFind} >Find</CustomButton>
+                        <CustomButton type='submit' disabled={loading || !username} variant='contained'>{loading ? <CircularProgress size={22} /> : 'Find'}</CustomButton>
                         </>}
                 
             </FormBox>

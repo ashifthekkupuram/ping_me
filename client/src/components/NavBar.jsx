@@ -91,7 +91,6 @@ const NavBar = () => {
 
   const onLogout = async () => {
       const result = await dispatch(logout())
-      console.log(result)
       toast.success(result.payload.message)
   }
 

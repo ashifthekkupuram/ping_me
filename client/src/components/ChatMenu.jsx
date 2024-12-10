@@ -60,7 +60,6 @@ const ChatMenu = () => {
     setError(null)
     const result = await dispatch(get_users())
     if (!result.payload.success) {
-      console.log(result.payload.message)
       setError(result.payload.message)
     }
     setLoading(false)

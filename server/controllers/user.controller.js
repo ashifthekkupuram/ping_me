@@ -74,9 +74,6 @@ export const get_users = async (req, res, next) => {
         })
 
     } catch (err) {
-
-        console.log(err)
-
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',
@@ -110,8 +107,6 @@ export const update_name = async (req, res, next) => {
 
         const updatedUser = await User.findByIdAndUpdate(user._Id, { name: { firstName: name.firstName.toLowerCase(), secondName: name.secondName.toLowerCase() } }, { new:  true })
 
-        console.log(updatedUser)
-
         return res.json({
             success: true,
             message: 'User name updated',
@@ -126,9 +121,6 @@ export const update_name = async (req, res, next) => {
         })
 
     } catch (err) {
-
-        console.log(err)
-
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

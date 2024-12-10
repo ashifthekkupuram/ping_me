@@ -115,8 +115,6 @@ const UserAddModal = () => {
             dispatch(setAddUser({}))
         } catch(err) {
 
-            console.log(err)
-
             if(err.response){
                 toast.error(err.response.data.message)
             }else{

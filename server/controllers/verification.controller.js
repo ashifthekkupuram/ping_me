@@ -106,9 +106,6 @@ export const post_verification = async (req, res, next) => {
         }
 
     } catch(err) {
-        
-        console.log(err)
-
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

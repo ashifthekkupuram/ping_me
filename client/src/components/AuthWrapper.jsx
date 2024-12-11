@@ -7,6 +7,7 @@ import { Toaster, toast } from 'react-hot-toast'
 
 import { refresh } from '../redux/slices/authSlice'
 import { setSocket, setOnline } from '../redux/slices/onlineSlice'
+import { toggleTheme } from '../redux/slices/darkModeSlice'
 import UserAddModal from './UserAddModal'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
@@ -44,6 +45,12 @@ const AuthWrapper = () => {
 
     useEffect(()=>{
         refreshToken()
+        const dark = JSON.parse(localStorage.getItem('darkMode')) || true
+        if(!dark){
+            dispatch(toggleTheme(false))
+        }else{
+            dispatch(toggleTheme(true))
+        }
     },[])
 
     useEffect(() => {

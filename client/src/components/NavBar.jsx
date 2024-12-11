@@ -94,8 +94,9 @@ const NavBar = () => {
       toast.success(result.payload.message)
   }
 
-  const onToggle = () => {
-    dispatch(toggleTheme())
+  const onToggle = (e) => {
+    localStorage.setItem('darkMode', e.target.checked)
+    dispatch(toggleTheme(e.target.checked))
   }
 
   const onMenu = () => {

@@ -6,7 +6,7 @@ const darkModeSlice = createSlice({
     name: 'darkMode',
     initialState,
     reducers: {
-        toggleTheme: (state) => state = !state
+        toggleTheme: (state, action) =>  action.payload
     }
 })
 

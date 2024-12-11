@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add'
 
 import { setAddUser } from '../redux/slices/addUserSlice'
 import { get_users } from '../redux/slices/conversationsSlice'
+import { toggleMenu } from '../redux/slices/chatMenu'
 
 import ChatCard from './ChatCard'
 
@@ -67,7 +68,7 @@ const ChatMenu = () => {
 
   const onAddChat = () => {
     dispatch(setAddUser({ open: true }))
-    setMenu(false)
+    dispatch(toggleMenu())
   }
 
   useEffect(() => {

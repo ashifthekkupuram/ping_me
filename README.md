@@ -2,6 +2,14 @@
 
 PingMe is a modern chat application built using the MERN stack (MongoDB, Express.js, React, Node.js). It features real-time messaging, user authentication and private messaging with WebSocket (Socket.IO) for instant communication.
 
+## Technologies
+- MongoDB, Express.js, React.js, Node.js (MERN)
+- Axios
+- Socket.io
+- Redux
+- React Router Dom
+- React Hot Toast
+
 ## Features
 Login <br />
 

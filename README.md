@@ -91,6 +91,58 @@ Light Mode (By cliking the toggle button on the navbar) <br />
 
 ![image info](screenshots/Ping%20me%20light%20mode.png) <br />
 
+## Run Website Locally
+
+clone the project
+
+```git clone https://github.com/ashifthekkupuram/ping_me.git```
+
+go to project directory
+
+```cd ping_me```
+
+go to client directory, install dependencies and create .env file in the client directory
+
+```cd client```
+
+```npm install``
+
+```
+VITE_API_URL = http://localhost:8000/api
+VITE_BACKEND_URL = http://localhost:8000
+```
+
+run the frontend
+
+```npm run dev``
+
+open new terminal and go to root directory of the project, install dependencies for the backend and create .env file in the root directory. Backend package file and .env file is in the root diretory
+
+```npm install```
+
+```
+PORT = 8000
+REFRESH_SECRET_KEY = ...
+ACCESS_SECRET_KEY = ...
+MONGODB_URI = ...
+ALLOWED_ORIGINS = 'http://localhost:5173 http://127.0.0.1:5173'
+EMAIL = (add the email that need to send email to reset password and verification)
+PASSWORD = (password or application password of added email)
+```
+
+run the backend
+
+```npm run dev```
+
+
+
+
+
+
+
+
+
+
 
 
 

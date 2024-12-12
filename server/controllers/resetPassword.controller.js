@@ -13,7 +13,7 @@ dotenv.config()
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\S]{8,}$/
 
-const RESET_PARA = "Thank you for using [Your Platform Name]! Click the link below to reset your password."
+const RESET_PARA = "Thank you for using Ping Me, [Your Platform Name]! Click the link below to reset your password."
 
 export const get_reset_password = async (req, res, next) => {
     try{

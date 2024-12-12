@@ -69,6 +69,7 @@ const NameChange = () => {
     }
 
     const onSubmit = async (e) => {
+        e.preventDefault()
         setError(null)
         setLoading(true)
         try {

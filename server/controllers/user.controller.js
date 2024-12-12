@@ -9,6 +9,7 @@ dotenv.config()
 const ACCESS_SECRET_KEY = process.env.ACCESS_SECRET_KEY
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\S]{8,}$/
+const USERNAME_REGEX = /^[a-z0-9]+$/
 
 export const find_user = async (req, res, next) => {
     try{
@@ -138,6 +139,13 @@ export const update_username = async (req, res, next) => {
             return res.status(400).json({
                 success: false,
                 message: 'Username is required'
+            })
+        }
+
+        if(!username.match(USERNAME_REGEX)){
+            return res.status(400).json({
+                success: false,
+                message: 'Username is must not have white spaces or hyphen'
             })
         }
 

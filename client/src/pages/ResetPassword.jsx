@@ -71,7 +71,8 @@ const ResetPassword = () => {
         setEmail(e.target.value)
     }
 
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
+        e.preventDefault()
         setError(null)
         setLoading(true)
         try{

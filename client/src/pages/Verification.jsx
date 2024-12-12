@@ -74,7 +74,8 @@ const Verification = () => {
     const navigate = useNavigate()
     const { token } = useParams()
 
-    const onVerify = async () => {
+    const onVerify = async (e) => {
+        e.preventDefault()
         setResult(null)
         setVerifyLoading(true)
         try{
@@ -93,6 +94,7 @@ const Verification = () => {
     }
 
     const onDelete = async () => {
+        e.preventDefault()
         setResult(null)
         setDeleteLoading(true)
         try{
@@ -142,7 +144,7 @@ const Verification = () => {
                     </> :
                     <>
                         <CustomChatBubleIcon />
-                        <Title variant='h4'>Confirm Reset Password</Title>
+                        <Title variant='h4'>Account Verification</Title>
                         <CustomButton disabled={disabled} variant='contained' color='success' onClick={onVerify}>{verifyLoading ? <CircularProgress size={32}/> : 'Verify'}</CustomButton>
                         <CustomButton disabled={disabled} variant='contained' color='error' onClick={onDelete}>{deleteLoading ? <CircularProgress size={32} /> : 'Delete'}</CustomButton>
                     </>)}

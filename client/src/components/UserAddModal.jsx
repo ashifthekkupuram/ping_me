@@ -100,7 +100,7 @@ const UserAddModal = () => {
         }
     }
 
-    const onMessage = async () => {
+    const onMessage = async (e) => {
         e.preventDefault()
         setLoading(true)
         try{

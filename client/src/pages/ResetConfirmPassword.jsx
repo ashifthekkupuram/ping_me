@@ -91,6 +91,7 @@ const ResetConfirmPassword = () => {
     }
 
     const onSubmit = async (e) => {
+        e.preventDefault()
         try {
             const response = await axios.put(`/reset/${token}`, { newPassword: password.password })
             setResult({ success: true, message: response.data.message })

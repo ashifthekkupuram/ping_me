@@ -205,7 +205,7 @@ const ChatSection = () => {
                     {conversation.map((message) => UserData._id == message.sender ? (!message.delete_from.includes(UserData._id) && <MessageRight key={message._id} selectedItems={selectedItems} message={message} onClick={() => onSelect(message._id)} onSelect={onSelect} selection={selection} />) : (!message.delete_from.includes(UserData._id) && <MessageLeft key={message._id} selectedItems={selectedItems} message={message} onSelect={onSelect} selection={selection} />))}
                 </MessageBody>
                 <Box style={{ display: 'flex', width: '100%' }} component='form' onSubmit={onSubmit}>
-                    <TextField value={text} placeholder='Typing anything...' sx={{ flex: 3 }} onChange={onTextChange} />
+                    <TextField value={text} placeholder='Typing anything...' autoComplete='off' sx={{ flex: 3 }} onChange={onTextChange} />
                     <Button type='submit' disabled={!text || textLoading} variant='contained'>{textLoading ? <CircularProgress size={25} /> :<SendIcon />}</Button>
                 </Box> </> : <LoadingBox> <Alert severity='error'>Please select an chat</Alert> </LoadingBox>}
             <DeleteMessageModal deleteModal={deleteModal} setDeleteModal={setDeleteModal} selectedItems={selectedItems} onSelection={onSelection} />

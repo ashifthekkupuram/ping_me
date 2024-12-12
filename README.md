@@ -95,17 +95,25 @@ Light Mode (By cliking the toggle button on the navbar) <br />
 
 clone the project
 
-```git clone https://github.com/ashifthekkupuram/ping_me.git```
+```
+git clone https://github.com/ashifthekkupuram/ping_me.git
+```
 
 go to project directory
 
-```cd ping_me```
+```
+cd ping_me
+```
 
 go to client directory, install dependencies and create .env file in the client directory
 
-```cd client```
+```
+cd client
+```
 
-```npm install``
+```
+npm install
+```
 
 ```
 VITE_API_URL = http://localhost:8000/api
@@ -114,11 +122,15 @@ VITE_BACKEND_URL = http://localhost:8000
 
 run the frontend
 
-```npm run dev``
+```
+npm run dev
+```
 
 open new terminal and go to root directory of the project, install dependencies for the backend and create .env file in the root directory. Backend package file and .env file is in the root diretory
 
-```npm install```
+```
+npm install
+```
 
 ```
 PORT = 8000
@@ -132,7 +144,9 @@ PASSWORD = (password or application password of added email)
 
 run the backend
 
-```npm run dev```
+```
+npm run dev
+```
 
 
 
